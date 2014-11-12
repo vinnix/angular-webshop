@@ -1,0 +1,49 @@
+<div ng-controller="SiteuserCtrl" class="content">
+
+    <h1>Siteuser</h1>
+
+    <h2>Valittu käyttäjä:</h2>
+
+    <select ng-model="siteuser" ng-options="siteuser.id as siteuser.username for siteuser in siteusers | orderBy:'username'" size="12"></select>
+
+    <p>
+        <button ng-click="openuser()">Open selected user</button>
+        <button ng-click="createuser()">Create new user</button>
+    </p>
+
+    <h2>{{mode}}:</h2>
+
+    <input type="hidden" ng-model="edit.id">
+
+    <ul>
+        <li><label>E-mail: <input type="text" ng-model="edit.email"></label></li>
+        <li><label>Username: <input type="text" ng-model="edit.username"></label></li>
+        <li><label>Password: <input type="password" ng-model="edit.password1"></label></li>
+        <li><label>(twice): <input type="password" ng-model="edit.password2"></label></li>
+        <li><label>Firstname: <input type="text" ng-model="edit.first_name"></label></li>
+        <li><label>Lastname: <input type="text" ng-model="edit.last_name"></label></li>
+    </ul>
+
+    <div ng-show="edit.id">
+
+        <h3>User roles:</h3>
+
+        <ul>
+            <li ng-repeat="role in edit.roles | orderBy:'text'">
+                <input type="checkbox" checklist-model="edit.siteuser_roles" checklist-value="role.id"> {{role.text}}
+            </li>
+        </ul>
+
+    </div>
+
+    <p>
+        <button ng-click="saveuser()">Save user</button>
+        <button ng-click="removeuser()" ng-show="edit.id">Remove user</button>
+    </p>                
+
+        </div>
+
+        <hr>
+
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div ng-controller="SettingsCtrl" class="content">
+
+    <h1>Asetukset</h1>
+
+    <h2>Password changing:</h2>
+
+    <p>
+        {{ message }}
+    </p>
+
+    <div class="login" ng-keydown="keyPressed($event)">
+
+        <ul>
+            <li><label>Current password: <input type="password" ng-model="oldpassword"></label></li>
+        </ul>
+
+        <ul>
+            <li><label>New password: <input type="password" ng-model="newpassword1"></label></li>
+            <li><label>(again): <input type="password" ng-model="newpassword2"></label></li>
+            <li><button ng-click="save()">Save</button></li>
+        </ul>
+
+    </div>
+
+</div>

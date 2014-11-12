@@ -1,0 +1,7 @@
+!.bowerrc
+.sass-cache
+*.sw*
+*~
+node_modules/
+vendor/
+build/

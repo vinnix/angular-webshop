@@ -1,0 +1,27 @@
+<div ng-controller="LoginCtrl" class="content">
+
+    <div ng-show="auth">
+
+        <h1>Already logged in</h1>
+
+        <p>
+            Please logout to reauthenticate.
+        </p>
+
+    </div>
+
+    <div ng-hide="auth" ng-keydown="keyPressed($event)" class="login">
+
+        <h1>Login</h1>
+        
+        <h2 ng-show="error">{{ error }}</h2>
+
+        <ul>
+            <li><label>Username: <input ng-model="username"></li>
+            <li><label>Password: <input type="password" ng-model="password"></li>
+            <li><button ng-click="login()">Login</button></li>
+        </ul>
+
+    </div>
+
+</div>
