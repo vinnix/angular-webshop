@@ -163,7 +163,8 @@ module.exports = function ( grunt ) {
       build_css: {
         src: [
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.less.css',
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.sass.css'
         ],
         dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
       },
@@ -246,12 +247,12 @@ module.exports = function ( grunt ) {
     less: {
       build: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.less %>'
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.less.css': '<%= app_files.less %>'
         }
       },
       compile: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.less %>'
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.less.css': '<%= app_files.less %>'
         },
         options: {
           cleancss: true,
@@ -521,7 +522,7 @@ module.exports = function ( grunt ) {
        */
       less: {
         files: [ 'src/**/*.less' ],
-        tasks: [ 'less:build' ]
+        tasks: [ 'less:build', 'concat:build_css' ]
       },
 
       /**
@@ -529,7 +530,7 @@ module.exports = function ( grunt ) {
        */
       sass: {
         files: [ 'src/**/*.scss' ],
-        tasks: [ 'sass:build' ]
+        tasks: [ 'sass:build', 'concat:build_css' ]
       },
 
       /**
