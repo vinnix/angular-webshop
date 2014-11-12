@@ -20,7 +20,7 @@ angular.module( 'admin', [
 .run( function run () {
 })
 
-.controller( 'AppCtrl', function AppCtrl($scope, $rootScope, $state, Session, Auth) {
+.controller( 'AppCtrl', function AppCtrl($scope, $rootScope, $timeout, $interval, $state, Session, Auth) {
 
     var get_session = function() {
         Session.get().$promise.then(function(x) {
@@ -54,14 +54,15 @@ angular.module( 'admin', [
         });
     };
 
+    var session_timeout;
     var logout = function() {
         console.log("Logged out");
         Session.remove();
         $scope.pages = null;
         delete $scope.username;
         Auth.disable();
-        clearInterval(session_timeout);
-        clearTimeout(auto_logout);
+        $interval.cancel(session_timeout);
+        $timeout.cancel(auto_logout);
         $state.transitionTo('login');
     };
 
@@ -72,8 +73,13 @@ angular.module( 'admin', [
     var auto_logout;
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
         // Whenever state is changed, we reset auto logout and set it again
-        clearTimeout(auto_logout);
-        auto_logout = setTimeout(function(){ logout(); }, (30*60*1000));
+        if (auto_logout) {
+            $timeout.cancel(auto_logout);
+        }
+        auto_logout = $timeout(function() {
+            logout();
+        }, 30*60*1000);
+
         if (angular.isDefined(toState.data.pageTitle)) {
             $scope.pageTitle = 'Admin - ' + toState.data.pageTitle;
         }
@@ -87,8 +93,11 @@ angular.module( 'admin', [
         logout();
     });
 
+    session_timeout = $interval(function() {
+        get_session();
+    }, 5*60*1000);
+
     get_session();
-    var session_timeout = setInterval(function(){ get_session(); }, (5*60*1000));
 
 })
 
