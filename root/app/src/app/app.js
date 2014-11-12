@@ -7,8 +7,14 @@ angular.module( 'app', [
     'ngResource'
 ])
 
-.config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
+.config( function myAppConfig ( $stateProvider, $urlRouterProvider, $locationProvider ) {
     $urlRouterProvider.otherwise( '/' );
+
+    // HTML5 mode enables to use the SPA without hashbangs (e.g. use app with real urls)
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
 })
 
 .run( function run () {
