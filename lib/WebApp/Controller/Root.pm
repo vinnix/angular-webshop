@@ -1,70 +1,84 @@
 package WebApp::Controller::Root;
 use Moose;
 use namespace::autoclean;
+use Data::Dumper;
 
 BEGIN { extends 'Catalyst::Controller' }
 
-#
-# Sets the actions in this controller to be registered with no prefix
-# so they function identically to actions created in MyApp.pm
-#
 __PACKAGE__->config(namespace => '');
 
-=encoding utf-8
-
-=head1 NAME
-
-WebApp::Controller::Root - Root Controller for WebApp
-
-=head1 DESCRIPTION
-
-[enter your description here]
-
-=head1 METHODS
-
-=head2 index
-
-The root page (/)
-
-=cut
-
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
-
-    # Hello World
-    $c->response->body( $c->welcome_message );
+sub base : Chained("/") PathPart('') CaptureArgs(0) {
 }
 
-=head2 default
-
-Standard 404 error page
-
-=cut
-
-sub default :Path {
-    my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
-    $c->response->status(404);
+sub assets : Chained('base') PathPart('assets') CaptureArgs() {
+    my ( $self, $c, @filepath ) = @_;
+    my $buildhtml = 'root/app/build/index.html';
+    my $binhtml = 'root/app/bin/index.html';
+    my $buildfile =  "root/app/build/assets/".join('/',@filepath);
+    my $binfile =  "root/app/bin/assets/".join('/',@filepath);
+    if (-e $buildhtml and -e $buildfile and scalar @filepath > 0) {
+        $c->serve_static_file($buildfile);
+    } elsif (-e $binhtml and -e $binfile and scalar @filepath > 0) {
+        $c->serve_static_file($binfile);
+    } else {
+        $c->response->body( 'Page not found' );
+        $c->response->status(404);
+    }
 }
 
-=head2 end
+sub vendor : Chained('base') PathPart('vendor') CaptureArgs() {
+    my ( $self, $c, @filepath ) = @_;
+    my $buildhtml = 'root/app/build/index.html';
+    my $buildfile =  "root/app/build/vendor/".join('/',@filepath);
+    if (-e $buildhtml and -e $buildfile and scalar @filepath > 0) {
+        $c->serve_static_file($buildfile);
+    } else {
+        $c->response->body( 'Page not found' );
+        $c->response->status(404);
+    }
+}
 
-Attempt to render a view, if needed.
+sub src : Chained('base') PathPart('src') CaptureArgs() {
+    my ( $self, $c, @filepath ) = @_;
+    my $buildhtml = 'root/app/build/index.html';
+    my $buildfile =  "root/app/build/src/".join('/',@filepath);
+    if (-e $buildhtml and -e $buildfile and scalar @filepath > 0) {
+        $c->serve_static_file($buildfile);
+    } else {
+        $c->response->body( 'Page not found' );
+        $c->response->status(404);
+    }
+}
 
-=cut
+sub default : Chained('base') PathPart('') CaptureArgs() {
+    my ( $self, $c, @filepath ) = @_;
+    my $buildhtml = 'root/app/build/index.html';
+    my $binhtml = 'root/app/bin/index.html';
+    
+    my ( $filetype, $filename );
+    if (scalar @filepath > 0) {
+        $filetype = substr $filepath[0], -3;
+        $filename = 'root/app/build/'.$filepath[0];
+    }
+
+    if (-e $buildhtml and $filetype eq '.js') {
+        if (-e $filename) {
+            $c->serve_static_file($filename);
+        } else {
+            $c->response->body( 'Page not found' );
+            $c->response->status(404);
+        }
+    } elsif (-e $buildhtml) {
+        $c->serve_static_file($buildhtml);
+    } elsif (-e $binhtml) {
+        $c->serve_static_file($binhtml);
+    } else {
+        $c->response->body( 'Page not found' );
+        $c->response->status(404);
+    }
+}
 
 sub end : ActionClass('RenderView') {}
-
-=head1 AUTHOR
-
-Jussi Kinnula
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 
