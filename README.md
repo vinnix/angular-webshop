@@ -1,5 +1,8 @@
 # angular-webshop
 
+Presentation can be viewed from here:
+https://docs.google.com/presentation/d/1IMy3bKOROkBR8O1zNqo8p23l3-Tn6f4t8khYGYYA8kA
+
 ## [Catalyst](http://www.catalystframework.org/) application
 
 Read more of [Catalyst Framework](http://www.catalystframework.org/) for tutorials and details.
