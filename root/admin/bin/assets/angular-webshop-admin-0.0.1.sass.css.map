@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAAA,MAAO;EACH,SAAS,EAAE,IAAI",
+"sources": ["../../src/sass/main.scss"],
 "names": [],
 "file": "angular-webshop-admin-0.0.1.sass.css"
 }
