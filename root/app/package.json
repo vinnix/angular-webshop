@@ -1,16 +1,16 @@
 {
-  "author": "Josh David Miller",
-  "name": "ngbp",
-  "version": "0.3.2",
-  "homepage": "https://github.com/ngbp/ngbp",
+  "author": "Jussi Kinnula",
+  "name": "angular-webshop-app",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jussikinnula/angular-webshop",
   "licenses": {
-    "type": "MIT",
-    "url": "https://raw.github.com/ngbp/ngbp/master/LICENSE"
+    "type": "LGPL",
+    "url": "https://raw.github.com/jussikinnula/angular-webshop/master/LICENSE"
   },
-  "bugs": "https://github.com/ngbp/ngbp/issues",
+  "bugs": "https://github.com/jussikinnula/angular-webshop/issues",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ngbp/ngbp.git"
+    "url": "git@github.com:jussikinnula/angular-webshop.git"
   },
   "dependencies": {},
   "devDependencies": {
@@ -21,7 +21,7 @@
     "grunt-contrib-jshint": "^0.4.3",
     "grunt-contrib-concat": "^0.3.0",
     "grunt-contrib-watch": "^0.4.4",
-    "grunt-contrib-uglify": "^0.2.7",
+    "grunt-contrib-uglify": "^0.4.1",
     "grunt-ngmin": "0.0.2",
     "grunt-html2js": "^0.1.9",
     "grunt-contrib-coffee": "^0.7.0",
