@@ -23,6 +23,7 @@ requires 'Plack::Builder';
 requires 'Plack::Response';
 requires 'Plack::MIME';
 requires 'Plack::App::Proxy';
+requires 'Plack::Middleware::Header';
 
 requires 'boolean';
 requires 'Data::Dumper';
@@ -34,7 +35,6 @@ requires 'JSON';
 requires 'LWP::Protocol::https';
 requires 'LWP::UserAgent';
 requires 'Math::Round';
-requires 'Net::Amazon::S3';
 requires 'Scalar::Util';
 requires 'Text::Unidecode';
 requires 'Try::Tiny';
