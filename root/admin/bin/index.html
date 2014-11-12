@@ -22,8 +22,9 @@
                         <div class="navbar-brand">admin</div>
                     </div>
                     <div class="collapse navbar-collapse" collapse="menuCollapsed">
-                        <ul class="nav navbar-nav" ng-repeat="page in pages | orderBy:'orderer'">
-                            <li ui-sref-active="active"><a ui-sref="{{page.link}}">{{page.title}}</a></li>
+                        <ul class="nav navbar-nav">
+                            <li ui-sref-active="active" ng-repeat="page in pages | orderBy:'orderer'"><a ui-sref="{{page.link}}">{{page.title}}</a></li>
+                            <li ng-show="username"><a ng-click="logout()">Logout</a></li>
                         </ul>
                     </div>
                 </div>

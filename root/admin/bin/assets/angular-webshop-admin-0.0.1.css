@@ -5778,3 +5778,6 @@ button.close {
 
 select {
   min-width: 20em; }
+
+a {
+  cursor: pointer; }
