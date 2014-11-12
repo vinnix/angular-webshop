@@ -16,8 +16,8 @@ module.exports = {
    * build tasks. `js` is all project javascript, less tests. `ctpl` contains
    * our reusable components' (`src/common`) template HTML files, while
    * `atpl` contains the same, but for our app's code. `html` is just our
-   * main HTML file, `less` is our main stylesheet, and `unit` contains our
-   * app's unit tests.
+   * main HTML file, `sass` is our main stylesheet (less only includes some
+   * dependency styles), and `unit` contains our app's unit tests.
    */
   app_files: {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
@@ -30,7 +30,8 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
-    less: 'src/less/main.less'
+    less: 'src/less/main.less',
+    sass: 'src/sass/main.scss'
   },
 
   /**

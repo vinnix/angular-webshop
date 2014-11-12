@@ -12,6 +12,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-coffeelint');
@@ -260,6 +261,28 @@ module.exports = function ( grunt ) {
     },
 
     /**
+     * `grunt-contrib-sass` handles our SASS/SCSS compilation and uglification automatically.
+     * Only our `main.scss` file is included in compilation; all other files
+     * must be imported from this file.
+     */
+    sass: {
+      build: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.sass.css': '<%= app_files.sass %>'
+        }
+      },
+      compile: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.sass.css': '<%= app_files.sass %>'
+        },
+        options: {
+          quiet: false,
+          sourcemap: true
+        }
+      }
+    },
+
+    /**
      * `jshint` defines the rules of our linter as well as which files we
      * should check. This file, all javascript sources, and all our unit tests
      * are linted based on the policies listed in `options`. But we can also
@@ -502,6 +525,14 @@ module.exports = function ( grunt ) {
       },
 
       /**
+       * When the CSS files change, we need to compile and minify them.
+       */
+      sass: {
+        files: [ 'src/**/*.scss' ],
+        tasks: [ 'sass:build' ]
+      },
+
+      /**
        * When a JavaScript unit test file changes, we only want to lint it and
        * run the unit tests. We don't want to do any live reloading.
        */
@@ -553,9 +584,9 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 'karmaconfig',
-    'karma:continuous' 
+    'sass:build', 'concat:build_css', 'copy:build_app_assets',
+    'copy:build_vendor_assets', 'copy:build_appjs', 'copy:build_vendorjs',
+    'index:build', 'karmaconfig', 'karma:continuous' 
   ]);
 
   /**
@@ -563,7 +594,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'less:compile', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'
+    'less:compile', 'sass:compile', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'
   ]);
 
   /**
