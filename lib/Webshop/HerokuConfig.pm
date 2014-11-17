@@ -1,4 +1,4 @@
-package FranticCom::SetCloudEnv;
+package Webshop::HerokuConfig;
 use strict;
 use warnings;
 use JSON;
