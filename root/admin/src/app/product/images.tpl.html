@@ -1,0 +1,16 @@
+<button ng-click="show()"><i class="fa fa-photo"></i></button>
+<div ng-show="edit" class="dialog">
+    <h3>Editing images <a ng-click="close()"><i class="fa fa-times"></i></a></h3>
+    <div class="images">
+        <div class="image" ng-repeat="image in images">
+            <show-image product="product" image="image"></show-image>
+        </div>
+        <div class="image upload" flow-init="{target: '/rest/image'}"
+            flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+            flow-files-submitted="$flow.upload()"
+            flow-file-success="success($message)"
+            >
+            <img src="/admin/assets/addimage.png" flow-btn flow-attrs="{accept:'image/*'}" title="Lisää uusi kuva">
+        </div>
+    </div>
+</div>

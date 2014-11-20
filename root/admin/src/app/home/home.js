@@ -18,7 +18,7 @@ angular.module( 'admin.home', [
     });
 })
 
-.controller( 'HomeCtrl', function HomeController( $scope ) {
+.controller( 'HomeCtrl', function HomeCtrl( $scope ) {
 })
 
 ;

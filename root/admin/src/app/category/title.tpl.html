@@ -1,0 +1,8 @@
+<div ng-hide="edit" ng-click="show()">{{ title }}</div>
+<div ng-show="edit" class="editor">
+
+    <input ng-model="edit">
+    <button ng-click="save()"><i class="fa fa-thumbs-o-up"></i></button>
+    <button ng-click="remove()"><i class="fa fa-trash-o"></i></button>
+
+</div>

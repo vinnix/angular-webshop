@@ -1,0 +1,24 @@
+<h1>Categories</h1>
+
+<div ng-controller="CategoryCtrl" class="content">
+
+    <table>
+        <tr>
+            <th>Order #</th>
+            <th>Category title</th>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="text" ng-model="newcategory" ng-disabled="disabled"> <button ng-click="create()" ng-disabled="disabled">Add category</button></td>
+        </tr>
+        <tr ng-repeat="category in categories | orderBy:'position':false">
+            <td class="position"><category-position category="category" count="count"></category-position></td>
+            <td><category-title category="category">{{ category.title }}</category-title></td>
+        </tr>
+        <tr>
+            <th>Order #</th>
+            <th>Category title</th>
+        </tr>
+    </table>
+
+</div>

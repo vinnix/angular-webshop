@@ -63,17 +63,24 @@ module.exports = {
    */
   vendor_files: {
     js: [
+      'vendor/jquery/dist/jquery.js',
+      'vendor/jquery-ui/jquery-ui.js',
       'vendor/angular/angular.js',
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-checklist-model/checklist-model.js',
-      'vendor/angular-cache-buster/angular-cache-buster.js'
+      'vendor/angular-cache-buster/angular-cache-buster.js',
+      'vendor/ng-flow/dist/ng-flow-standalone.js',
+      'vendor/angular-ui-sortable/sortable.js',
+      'vendor/json-edit/js/directives.js'
     ],
     css: [
+      'vendor/json-edit/css/styles.css'
     ],
     assets: [
+      'src/assets/*.png'
     ]
   },
 };

@@ -3,6 +3,7 @@
     <head>
         <title ng-bind="pageTitle"></title>
         <base href="/admin/">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
         <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
         <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
@@ -23,7 +24,7 @@
                     </div>
                     <div class="collapse navbar-collapse" collapse="menuCollapsed">
                         <ul class="nav navbar-nav">
-                            <li ui-sref-active="active" ng-repeat="page in pages | orderBy:'orderer'"><a ui-sref="{{page.link}}">{{page.title}}</a></li>
+                            <li ui-sref-active="active" ng-repeat="page in pages | orderBy:'orderer'"><a ui-sref="{{page.link}}"><i class="fa fa-{{page.awesome}}"></i> {{page.title}}</a></li>
                             <li ng-show="username"><a ng-click="logout()">Logout</a></li>
                         </ul>
                     </div>

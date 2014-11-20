@@ -5,6 +5,8 @@ angular.module( 'admin', [
     'admin.login',
     'admin.settings',
     'admin.siteuser',
+    'admin.category',
+    'admin.product',
     'ui.router',
     'ngResource',
     'ngCacheBuster'
@@ -20,7 +22,7 @@ angular.module( 'admin', [
 .run( function run () {
 })
 
-.controller( 'AppCtrl', function AppCtrl($scope, $rootScope, $timeout, $interval, $state, Session, Auth) {
+.controller( 'AppCtrl', function AppCtrl($scope, $rootScope, $state, Session, Auth) {
 
     var get_session = function() {
         Session.get().$promise.then(function(x) {
@@ -30,12 +32,14 @@ angular.module( 'admin', [
                 {
                     'orderer':1,
                     'link':'home',
-                    'title':'Home'
+                    'title':'Home',
+                    'awesome':'home'
                 },
                 {
                     'orderer':2,
                     'link':'settings',
-                    'title':'Settings'
+                    'title':'Settings',
+                    'awesome':'wrench'
                 }
             ];
 
@@ -44,7 +48,20 @@ angular.module( 'admin', [
                     $scope.pages.push({
                         'orderer':3,
                         'link':'siteuser',
-                        'title':'Siteuser'
+                        'title':'Siteuser',
+                        'awesome':'user'
+                    });
+                    $scope.pages.push({
+                        'orderer':4,
+                        'link':'category',
+                        'title':'Categories',
+                        'awesome':'tags'
+                    });
+                    $scope.pages.push({
+                        'orderer':5,
+                        'link':'product',
+                        'title':'Products',
+                        'awesome':'suitcase'
                     });
                 }
             });
@@ -61,8 +78,8 @@ angular.module( 'admin', [
         $scope.pages = null;
         delete $scope.username;
         Auth.disable();
-        $interval.cancel(session_timeout);
-        $timeout.cancel(auto_logout);
+        clearInterval(session_timeout);
+        clearTimeout(auto_logout);
         $state.transitionTo('login');
     };
 
@@ -73,13 +90,8 @@ angular.module( 'admin', [
     var auto_logout;
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
         // Whenever state is changed, we reset auto logout and set it again
-        if (auto_logout) {
-            $timeout.cancel(auto_logout);
-        }
-        auto_logout = $timeout(function() {
-            logout();
-        }, 30*60*1000);
-
+        clearTimeout(auto_logout);
+        auto_logout = setTimeout(function(){ logout(); }, (30*60*1000));
         if (angular.isDefined(toState.data.pageTitle)) {
             $scope.pageTitle = 'Admin - ' + toState.data.pageTitle;
         }
@@ -93,12 +105,8 @@ angular.module( 'admin', [
         logout();
     });
 
-    session_timeout = $interval(function() {
-        get_session();
-    }, 5*60*1000);
-
     get_session();
-
+    session_timeout = setInterval(function(){ get_session(); }, (5*60*1000));
 })
 
 .factory('Auth', function() {
@@ -133,6 +141,38 @@ angular.module( 'admin', [
     }); 
 }])
 
+.factory('Category', ['$resource', function($resource) {
+    return $resource('/rest/category/:id', {
+        id:'@id'
+    }); 
+}])
+
+.factory('CategoryPosition', ['$resource', function($resource) {
+    return $resource('/rest/category/:id/position/:position', {
+        id:'@id',
+        position:'@position'
+    }); 
+}])
+
+.factory('Product', ['$resource', function($resource) {
+    return $resource('/rest/product/:id', {
+        id:'@id'
+    }); 
+}])
+
+.factory('ProductImages', ['$resource', function($resource) {
+    return $resource('/rest/product/:product/images/:image', {
+        product:'@product',
+        image:'@image'
+    }); 
+}])
+
+.factory('Image', ['$resource', function($resource) {
+    return $resource('/rest/image/:id', {
+        id:'@id'
+    }); 
+}])
+
 .factory('removeobject', function() {
     return function(data, id) {
         var whatIndex = null;
@@ -152,6 +192,20 @@ angular.module( 'admin', [
             var i = array.length;
             while (i--) {
                 if (array[i] === item) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+})
+
+.factory('containsid', function() {
+    return function(id, array) {
+        if (id && array) {
+            var i = array.length;
+            while (i--) {
+                if (array[i].id === id) {
                     return true;
                 }
             }

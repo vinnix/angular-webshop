@@ -1,0 +1,38 @@
+<h1>Products</h1>
+
+<div ng-controller="ProductCtrl" class="content">
+
+    <table>
+        <tr>
+            <th><a ng-click="predicate = 'id'; reverse=false">ID</a></th>
+            <th><a ng-click="predicate = 'title'; reverse=false">Title</a></th>
+            <th><a ng-click="predicate = 'updated'; reverse=true">Updated</a></th>
+            <th>Actions</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="editablefield"><input ng-model="newtitle"><div ng-if="error" class="error">!!!</div></td>
+            <td class="editablefield"><input ng-model="newemail"></td>
+            <td></td>
+            <td><button ng-click="create()">Add product</button></td>
+        </tr>
+        <tr ng-repeat="product in products | orderBy:predicate:reverse">
+            <td>{{ product.id }}</td>
+            <td class="editablefield"><product-title product="product"></product-title></td>
+            <td>{{ product.updated | date:'dd.MM.yyyy' }}</td>
+            <td class="editbuttons">
+                <product-editor product="product"></product-editor>
+                <product-images product="product"></product-images>
+                <product-hidden product="product"></product-hidden>
+                <button ng-click="remove(product.id)"><i class="fa fa-trash"></i></button>
+            </td>
+        </tr>
+        <tr>
+            <th><a ng-click="predicate = 'id'; reverse=false">ID</a></th>
+            <th><a ng-click="predicate = 'title'; reverse=false">Title</a></th>
+            <th><a ng-click="predicate = 'updated'; reverse=true">Updated</a></th>
+            <th>Actions</th>
+        </tr>
+    </table>
+
+</div>
