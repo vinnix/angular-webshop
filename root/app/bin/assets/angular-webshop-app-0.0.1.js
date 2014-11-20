@@ -1,5 +1,5 @@
 /**
- * angular-webshop-app - v0.0.1 - 2014-11-12
+ * angular-webshop-app - v0.0.1 - 2014-11-20
  * https://github.com/jussikinnula/angular-webshop
  *
  * Copyright (c) 2014 Jussi Kinnula
