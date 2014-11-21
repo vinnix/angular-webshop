@@ -13,10 +13,10 @@ __PACKAGE__->add_columns(
     "category",
     { data_type => "int", is_foreign_key => 1 },
     "position",
-    { data_type => "int" },
+    { data_type => "int", is_nullable => 1 },
 );
 
-__PACKAGE__->set_primary_key(qw( product category position ));
+__PACKAGE__->set_primary_key(qw( product category ));
 
 __PACKAGE__->belongs_to(
     product => 'WebApp::Schema::Result::Product',
