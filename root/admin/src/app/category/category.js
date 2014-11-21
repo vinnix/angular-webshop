@@ -14,7 +14,7 @@ angular.module( 'admin.category', [
             }
         },
         data: {
-            pageTitle: 'Tuoteryhmät'
+            pageTitle: 'Categories'
         }
     });
 })
@@ -42,7 +42,8 @@ angular.module( 'admin.category', [
             $scope.count = $scope.count + 1;
             $rootScope.$emit('recalculate', 1, $scope.count);
         },function(error) {
-            console.log(error);
+            $scope.error = true;
+            alert("Error! Check missing field.");
         });
         $scope.newcategory = null;
     };
@@ -120,8 +121,7 @@ angular.module( 'admin.category', [
         scope: {
             'category': '=category'
         },
-        controller: function($scope, $rootScope, Category, removeobject) {
-
+        controller: function($scope, Category) {
             $scope.title = $scope.category.title;
             $scope.show = function() {
                 $scope.edit = $scope.category.title;
@@ -141,19 +141,27 @@ angular.module( 'admin.category', [
                 $scope.title = $scope.edit;
                 $scope.edit = false;
             };
+        }
+    };
+})
 
+.directive('categoryRemove', function() {
+    return {
+        restrict: 'E',
+        template: '<button ng-click="remove()"><i class="fa fa-trash-o"></i> Poista</button>',
+        scope: {
+            'category': '=category'
+        },
+        controller: function($scope, $rootScope, Category) {
             $scope.remove = function() {
                 Category.remove({
                     "id": $scope.category.id
                 }).$promise.then(function(success) {
                     $rootScope.$emit('removeMeFromCategories', $scope.category.id);
-
                 },function(error) {
                     console.log("ERROR!!!");
                     // Error
                 });
-                $scope.title = null;
-                $scope.edit = false;
             };
 
         }
