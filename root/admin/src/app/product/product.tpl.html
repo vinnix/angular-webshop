@@ -22,6 +22,7 @@
             <td>{{ product.updated | date:'dd.MM.yyyy' }}</td>
             <td class="editbuttons">
                 <product-editor product="product"></product-editor>
+                <product-categories product="product"></product-categories>
                 <product-images product="product"></product-images>
                 <product-hidden product="product"></product-hidden>
                 <button ng-click="remove(product.id)"><i class="fa fa-trash"></i></button>

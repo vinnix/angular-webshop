@@ -164,6 +164,13 @@ angular.module( 'admin', [
     return $resource('/rest/product/:product/images/:image', {
         product:'@product',
         image:'@image'
+    });
+}])
+
+.factory('ProductCategories', ['$resource', function($resource) {
+    return $resource('/rest/product/:product/categories/:category', {
+        product:'@product',
+        category:'@category'
     }); 
 }])
 

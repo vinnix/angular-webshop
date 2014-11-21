@@ -278,4 +278,80 @@ angular.module( 'admin.product', [
     };
 })
 
+.directive('productCategories', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'product/categories.tpl.html',
+        scope: {
+            'product': '='
+        },
+        controller: function($scope, $rootScope, Category, removeobject) {
+            $scope.edit = false;
+            $scope.show = function() {
+                $scope.edit = true;
+                $scope.categories = [];
+                Category.get().$promise.then(function(success) {
+                    $scope.categories = $scope.categories.concat(success.categories);
+                },function(error) {
+                    // Error
+                });
+            };
+
+            $scope.close = function() {
+                $scope.categories = null;
+                $scope.edit = false;
+            };
+
+            $rootScope.$on('removecategory', function(e, id) {
+                if (id > 0) {
+                    $scope.categories = removeobject($scope.categories, id);
+                }
+            });
+        }
+    };
+})
+
+.directive('checkCategory', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'product/category.tpl.html',
+        scope: {
+            'product': '=',
+            'category': '='
+        },
+        controller: function($scope, $rootScope, ProductCategories) {
+            ProductCategories.get({
+                "product": $scope.product.id,
+                "category": $scope.category.id
+            }).$promise.then(function(success) {
+                $scope.enabled = true;
+            },function(error) {
+                $scope.enabled = false;
+            });
+
+            $scope.toggle = function() {
+                if ($scope.enabled === true) {
+                    ProductCategories.save({
+                        "product": $scope.product.id,
+                        "newcategory": $scope.category.id
+                    }).$promise.then(function(success) {
+                        // Now it's saved
+                    }, function(error) {
+                        console.log ("ERROR:",error);
+                    });
+                } else {
+                    ProductCategories.remove({
+                        "product": $scope.product.id,
+                        "category": $scope.category.id
+                    }).$promise.then(function(success) {
+                        // Now it's saved
+                    }, function(error) {
+                        console.log ("ERROR:",error);
+                    });
+                }
+            };
+        }
+    };
+})
+
 ;
