@@ -27,7 +27,7 @@ sub index_GET {
         my @images;
         for my $productimage ($productimages->all) {
             my $is_main = false;
-            if ($productimage->image->id == $productimage->product->main_image->id) {
+            if ($productimage->image and $productimage->product and $productimage->product->main_image and $productimage->image->id == $productimage->product->main_image->id) {
                 $is_main = true;
             }
             push @images, {
