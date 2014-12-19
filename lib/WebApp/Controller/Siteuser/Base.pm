@@ -1,4 +1,4 @@
-package WebApp::Controller::REST::Siteuser::Base;
+package WebApp::Controller::Siteuser::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -7,9 +7,9 @@ use Scalar::Util qw(looks_like_number);
 use DateTime;
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::REST::Root' }
+BEGIN { extends 'WebApp::Controller::Root' }
 
-sub siteuser_base : Chained("rest_base") PathPart("siteuser") CaptureArgs(0) {
+sub siteuser_base : Chained("base") PathPart("siteuser") CaptureArgs(0) {
     my ($self, $c) = @_;    
 
     my @roles;

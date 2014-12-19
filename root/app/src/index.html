@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="app" ng-controller="AppCtrl">
+<html ng-app="app" ng-controller="AppCtrl" ng-init="main.base_url = '<: $base :>'">
     <head>
         <title ng-bind="pageTitle"></title>
+        <base href="<: $base :>">
         <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
         <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
         <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>

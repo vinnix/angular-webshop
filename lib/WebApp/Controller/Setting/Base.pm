@@ -1,4 +1,4 @@
-package WebApp::Controller::REST::Setting::Base;
+package WebApp::Controller::Setting::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -7,9 +7,9 @@ use Scalar::Util qw(looks_like_number);
 use DateTime;
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::REST::Root' }
+BEGIN { extends 'WebApp::Controller::Root' }
 
-sub setting_base : Chained("rest_base") PathPart("setting") CaptureArgs(0) {
+sub setting_base : Chained("base") PathPart("setting") CaptureArgs(0) {
     my ($self, $c) = @_;    
 
     my @roles;

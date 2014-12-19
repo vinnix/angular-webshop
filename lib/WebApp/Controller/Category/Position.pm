@@ -1,11 +1,11 @@
-package WebApp::Controller::REST::Category::Position;
+package WebApp::Controller::Category::Position;
 use Moose;
 use namespace::autoclean;
 use utf8;
 use Data::Dumper;
 use Scalar::Util qw(looks_like_number);
 
-BEGIN { extends 'WebApp::Controller::REST::Category::Base' }
+BEGIN { extends 'WebApp::Controller::Category::Base' }
 
 sub position_base : Chained("stash_category") PathPart("position") CaptureArgs(0) {
 }

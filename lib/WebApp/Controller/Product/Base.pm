@@ -1,4 +1,4 @@
-package WebApp::Controller::REST::Product::Base;
+package WebApp::Controller::Product::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -11,7 +11,7 @@ use DateTime;
 use DateTime::Format::Pg;
 use Time::HiRes;
 
-BEGIN { extends 'WebApp::Controller::REST::Root' }
+BEGIN { extends 'WebApp::Controller::Root' }
 
 sub create_slug {
     my ($product) = @_;
@@ -43,7 +43,7 @@ sub create_slug {
     return $created_slug;
 }
 
-sub product_base : Chained("rest_base") PathPart("product") CaptureArgs(0) {
+sub product_base : Chained("base") PathPart("product") CaptureArgs(0) {
     my ($self, $c) = @_;
     $c->stash->{default_payload} = 
         encode_json({

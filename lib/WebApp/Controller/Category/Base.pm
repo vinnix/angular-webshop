@@ -1,4 +1,4 @@
-package WebApp::Controller::REST::Category::Base;
+package WebApp::REST::Category::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -8,9 +8,9 @@ use Scalar::Util qw(looks_like_number);
 use Data::Dumper;
 use Text::Unidecode;
 
-BEGIN { extends 'WebApp::Controller::REST::Root' }
+BEGIN { extends 'WebApp::REST::Root' }
 
-sub category_base : Chained("rest_base") PathPart("category") CaptureArgs(0) {
+sub category_base : Chained("base") PathPart("category") CaptureArgs(0) {
 }
 
 sub index : Chained("category_base") PathPart("") ActionClass("REST") {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="admin" ng-controller="AppCtrl">
+<html ng-app="admin" ng-controller="AppCtrl" ng-init="main.base_url = '<: $base :>'">
     <head>
         <title ng-bind="pageTitle"></title>
-        <base href="/admin/">
+        <base href="<: $base :>">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
         <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>

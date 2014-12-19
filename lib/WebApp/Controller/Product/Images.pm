@@ -1,4 +1,4 @@
-package WebApp::Controller::REST::Product::Images;
+package WebApp::Controller::Product::Images;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -8,7 +8,7 @@ use Data::Dumper;
 use Scalar::Util qw(looks_like_number);
 use boolean;
 
-BEGIN { extends 'WebApp::Controller::REST::Product::Base' }
+BEGIN { extends 'WebApp::Controller::Product::Base' }
 
 sub images_base : Chained("stash_product") PathPart("images") CaptureArgs(0) {
 }

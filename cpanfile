@@ -24,6 +24,8 @@ requires 'Plack::Response';
 requires 'Plack::MIME';
 requires 'Plack::App::Proxy';
 requires 'Plack::Middleware::Header';
+requires 'Plack::Response';
+requires 'Text::Xslate';
 
 requires 'boolean';
 requires 'Data::Dumper';
@@ -38,3 +40,4 @@ requires 'Math::Round';
 requires 'Scalar::Util';
 requires 'Text::Unidecode';
 requires 'Try::Tiny';
+requires 'Encode';
