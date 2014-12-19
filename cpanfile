@@ -41,3 +41,5 @@ requires 'Scalar::Util';
 requires 'Text::Unidecode';
 requires 'Try::Tiny';
 requires 'Encode';
+requires 'Cloudinary';
+requires 'Mojo::IOLoop::Delay';

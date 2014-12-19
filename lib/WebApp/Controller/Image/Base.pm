@@ -14,7 +14,25 @@ use Data::Dumper;
 
 BEGIN { extends 'WebApp::Controller::Root' }
 
+has 'cloudinary' => (is => 'ro', lazy => 1, builder => '_build_cloudinary');
 has 'ua' => (is => 'ro', lazy => 1, builder => '_build_ua');
+
+sub _build_cloudinary {
+    my ($self) = @_;
+    die "[FATAL ERROR] Cloudinary environment variables missing" unless (
+            $ENV{CLOUDINARY_CLOUD} and
+            $ENV{CLOUDINARY_API_KEY} and
+            $ENV{CLOUDINARY_API_SECRET}
+        );
+
+    my $cloudinary = Cloudinary->new(
+        cloud_name => $ENV{CLOUDINARY_CLOUD},
+        api_key => $ENV{CLOUDINARY_API_KEY},
+        api_secret => $ENV{CLOUDINARY_API_SECRET},
+    );
+
+    return $cloudinary;
+}
 
 sub _build_ua {
     my ($self) = @_;
@@ -49,16 +67,16 @@ sub index_POST {
     my ($self, $c) = @_;
 
     my $image;
-    my $image_data;
+    my $tempfile;
     my $filename;
     my $params ||= $c->req->data || $c->req->params;
 
-    if ($params->{src} and $params->{coords}) {
+print Dumper $params;
 
+    if ($params->{src} and $params->{coords}) {
         # Get filename
         my (@temp) = split("/",$params->{src});
         $filename = $temp[-1];
-        print Dumper $filename;
 
         my $protocol = substr $params->{src}, 0, 2;
         if ($protocol eq '//') {
@@ -82,33 +100,52 @@ sub index_POST {
                 width => round($params->{coords}->[4] * $ratio),
                 height => round($params->{coords}->[5] * $ratio),
             );
-            $image->write( data => \$image_data, type => 'jpeg' )
+            (undef, $tempfile) = tempfile( SUFFIX => '.jpg' );
+            $image->write( file => $tempfile, type => 'jpeg' )
                 or die "Cannot write data: ", Imager->errstr;
         }
     } elsif (my $upload = $c->req->upload('file')) {
-        $image = Imager->new();
-        $image->read( file => $upload->tempname )
-            or die "Cannot read " . $upload->tempname . ": ", Imager->errstr;
-        $image->write( data => \$image_data, type => 'jpeg' )
-            or die "Cannot write data: ", Imager->errstr;
+
+        $tempfile = $upload->tempname;
         $filename = $upload->filename;
     }
 
-    if ($image_data) {
-        my $image_id = sha256_hex($filename);
+    if ($tempfile) {
+        my $delay = Mojo::IOLoop::Delay->new;
+        my $end = $delay->begin;
 
-        # TODO, need to upload image to somewhere
-
-        my $created_image = $c->model("DB::Image")->find_or_create({
-            link => $image_id . ".jpeg",
-            width => $image->getwidth,
-            height => $image->getheight,
+        my @tags;
+        if ($params->{type}) {
+            push @tags, $params->{type};
+        }
+        my $uploaded_image;
+        $self->cloudinary->upload({
+            file => { file => $tempfile },
+            tags => @tags,
+        }, sub {
+            my ($cloudinary, $res) = @_;
+            die "ERROR: ".$res->{error} if $res->{error};
+            $uploaded_image = $c->model("DB::Image")->find_or_create({
+                link => $res->{url},
+                width => $res->{width},
+                height => $res->{height},
+                cloudinary_cloud_name => $ENV{CLOUDINARY_CLOUD},
+                cloudinary_public_id => $res->{public_id},
+            });
+            $end->();
         });
+        $delay->wait;
+
         $self->status_ok( $c, entity => {
-            id => $created_image->id,
-            link => $created_image->link,
-            width => $created_image->width,
-            height => $created_image->height,
+            success => 'true',
+            id => $uploaded_image->id,
+            width => $uploaded_image->width,
+            height => $uploaded_image->height,
+            image_src => $uploaded_image->link,
+            cloudinary => {
+                public_id => $uploaded_image->cloudinary_public_id,
+                cloud_name => $uploaded_image->cloudinary_cloud_name,
+            },
         });
     } else {
         $self->status_not_found($c, message => "image not found");
@@ -133,8 +170,18 @@ sub image_GET {
         $self->status_ok( $c, entity => {
             id => $image->id,
             link => $image->link,
+            lastmodified => $image->lastmodified,
+            etag => $image->etag,
+            basename => $image->basename,
+            alt => $image->alt,
+            contenttype => $image->contenttype,
+            contentlength => $image->contentlength+0,
             width => $image->width,
             height => $image->height,
+            cloudinary => $image->cloudinary_public_id ? {
+                public_id => $image->cloudinary_public_id,
+                cloud_name => $image->cloudinary_cloud_name,
+            } : undef,
         });
     } else {
         $self->status_not_found($c, message => "image not found");
