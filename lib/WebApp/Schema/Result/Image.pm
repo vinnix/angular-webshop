@@ -16,6 +16,10 @@ __PACKAGE__->add_columns(
     { data_type => "int", is_nullable => 1 },
     "height",
     { data_type => "int", is_nullable => 1 },
+    "cloudinary_cloud_name",
+    { data_type => "varchar", is_nullable => 1, size => 100 },
+    "cloudinary_public_id",
+    { data_type => "varchar", is_nullable => 1, size => 100 },
 );
 
 __PACKAGE__->set_primary_key("id");
