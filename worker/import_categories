@@ -1,0 +1,27 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use lib 'lib';
+
+#use Env::Heroku::Cloudinary;
+use Env::Heroku::Pg;
+use Env::Heroku::Rediscloud;
+use WebApp;
+use Encode qw(encode_utf8);
+use JSON;
+use LWP::UserAgent;
+use Data::Dumper;
+
+my $categories_url;
+if (@ARGV and $ARGV[0]) {
+    $categories_url = $ARGV[0];
+}
+
+die "Categories URL is not set!" unless $categories_url;
+
+my $ua = LWP::UserAgent->new;
+my $json = $ua->get($categories_url)->content;
+my $categories = decode_json($json);
+
+print Dumper $categories;
