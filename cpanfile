@@ -24,6 +24,7 @@ requires 'Plack::Response';
 requires 'Plack::MIME';
 requires 'Plack::App::Proxy';
 requires 'Plack::Middleware::Header';
+requires 'Plack::Middleware::Static';
 requires 'Plack::Response';
 requires 'Text::Xslate';
 
@@ -43,3 +44,5 @@ requires 'Try::Tiny';
 requires 'Encode';
 requires 'Cloudinary';
 requires 'Mojo::IOLoop::Delay';
+requires 'Finance::Bank::Paytrail';
+requires 'URI';
