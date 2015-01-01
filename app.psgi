@@ -31,11 +31,11 @@ builder {
     enable 'ReverseProxy';
 
     enable "Plack::Middleware::Static",
-        path => qr{^/assets/}, root => 'root/';
+        path => qr{^/common/}, root => 'root/';
 
     enable 'ErrorDocument',
-        404 => 'root/assets/html/404.html',
-        500 => 'root/assets/html/500.html';
+        404 => 'root/common/html/404.html',
+        500 => 'root/common/html/500.html';
 
     mount '/rest' => $app;
     mount '/admin/build' => $spa->('root/admin/build','/admin/build/');
