@@ -23,7 +23,9 @@ sub index_GET {
         push @categories_data, {
             id => $category->id,
             title => $category->title,
+            description => $category->description,
             position => $category->position,
+            hidden => $category->hidden,
         };
     }
     $self->status_ok( $c, entity => { categories => \@categories_data } );
@@ -48,12 +50,15 @@ sub index_POST {
         my $category = $c->model("DB::Category")->create({
             title => $params->{title},
             position => $position,
+            hidden => 1,
         });
 
         $self->status_ok( $c, entity => {
             id => $category->id,
             title => $category->title,
+            description => $category->description,
             position => $category->position,
+            hidden => $category->hidden,
         });
     } else {
         $self->status_forbidden($c, message => "access denied");
@@ -82,7 +87,9 @@ sub category_GET {
             $self->status_ok( $c, entity => {
                 id => $category->id,
                 title => $category->title,
+                description => $category->description,
                 position => $category->position,
+                hidden => $category->hidden,
             });
         } else {
             $self->status_not_found($c, message => "category not found");
@@ -97,14 +104,30 @@ sub category_POST {
     if ($c->check_user_roles("admin")) {
         my $params ||= $c->req->data || $c->req->params;
         if (my $category = $c->model("DB::Category")->find($c->stash->{category_id})) {
-            $category->update({
-                title => $params->{title},
-            });
+            if ($params->{title}) {
+                $category->update({
+                    title => $params->{title},
+                });
+            }
+
+            if ($params->{description}) {
+                $category->update({
+                    description => $params->{description},
+                });
+            }
+
+            if ($params->{hidden}) {
+                $category->update({
+                    hidden => $params->{hidden},
+                });
+            }
 
             $self->status_ok( $c, entity => {
                 id => $category->id,
                 title => $category->title,
+                description => $category->description,
                 position => $category->position,
+                hidden => $category->hidden,
             });
         } else {
             $self->status_not_found($c, message => "category not found");
