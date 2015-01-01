@@ -5368,5 +5368,24 @@ button.close {
 @media print {
   .hidden-print {
     display: none !important; } }
+header {
+  background-image: linear-gradient(to top, #006600, #009900);
+  margin: 0;
+  padding: 0; }
+  header h1 {
+    padding: 10px;
+    margin: 0; }
+    header h1 img {
+      width: auto;
+      height: 100px; }
+  header .search {
+    float: right;
+    width: 300px;
+    padding: 5px;
+    margin-top: 72px; }
+
+.navbar-form {
+  margin-left: 0;
+  margin-right: 0; }
 
 /*# sourceMappingURL=angular-webshop-app-0.0.1.sass.css.map */
