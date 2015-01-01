@@ -9,7 +9,8 @@ angular.module( 'admin', [
     'admin.product',
     'ui.router',
     'ngResource',
-    'ngCacheBuster'
+    'ngCacheBuster',
+    'ui.bootstrap.alert'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider, $locationProvider, httpRequestInterceptorCacheBusterProvider ) {

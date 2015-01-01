@@ -1,8 +1,8 @@
-<button ng-click="show()"><i class="fa fa-edit"></i></button>
+<button class="btn btn-default" ng-click="show()"><i class="fa fa-edit"></i></button>
 <div ng-show="edit" class="dialog">
-    <h3>Editing fields <a ng-click="close()"><i class="fa fa-times"></i></a></h3>
+    <h3>Kenttien muokkaus <a ng-click="close()"><i class="fa fa-times"></i></a></h3>
     <div class="jsonView">
         <json child="edit" default-collapsed="false" type="object"></json>
     </div>
-    <button ng-click="save()"><i class="fa fa-thumbs-o-up"></i> Tallenna</button>
+    <button class="btn btn-default" ng-click="save()"><i class="fa fa-thumbs-o-up"></i> Tallenna</button>
 </div>

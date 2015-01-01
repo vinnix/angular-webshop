@@ -1,7 +1,6 @@
 angular.module( 'admin.settings', [
     'ngResource',
-    'ui.router',
-    'ui.bootstrap'
+    'ui.router'
 ])
 
 .config(function config($stateProvider) {

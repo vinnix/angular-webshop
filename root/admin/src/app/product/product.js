@@ -1,6 +1,5 @@
 angular.module( 'admin.product', [
     'ui.router',
-    'ui.bootstrap',
     'JSONedit',
     'flow'
 ])

@@ -1,6 +1,5 @@
 angular.module( 'admin.login', [
-    'ui.router',
-    'ui.bootstrap'
+    'ui.router'
 ])
 
 .config(function config( $stateProvider ) {

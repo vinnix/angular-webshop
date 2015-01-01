@@ -1,4 +1,4 @@
-<div ng-controller="SettingsCtrl" class="content">
+<div ng-controller="SettingsCtrl">
 
     <h1>Settings</h1>
 
@@ -8,18 +8,27 @@
         {{ message }}
     </p>
 
-    <div class="login" ng-keydown="keyPressed($event)">
-
-        <ul>
-            <li><label>Current password: <input type="password" ng-model="oldpassword"></label></li>
-        </ul>
-
-        <ul>
-            <li><label>New password: <input type="password" ng-model="newpassword1"></label></li>
-            <li><label>(again): <input type="password" ng-model="newpassword2"></label></li>
-            <li><button ng-click="save()">Save</button></li>
-        </ul>
-
+    <div class="form-horizontal" ng-keydown="keyPressed($event)">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="oldpassword">Current password:</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="oldpassword" type="password" ng-model="oldpassword"></label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="newpassword1">New password:</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="newpassword1" type="password" ng-model="newpassword1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="newpassword2">(again):</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="newpassword2" type="password" ng-model="newpassword2">
+            </div>
+        </div>
     </div>
+
+    <button class="btn btn-default" ng-click="save()">Save</button>
 
 </div>

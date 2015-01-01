@@ -1,6 +1,5 @@
 angular.module( 'admin.siteuser', [
     'ui.router',
-    'ui.bootstrap',
     'checklist-model'
 ])
 

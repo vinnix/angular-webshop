@@ -1,20 +1,19 @@
 <h1>Products</h1>
 
-<div ng-controller="ProductCtrl" class="content">
+<div ng-controller="ProductCtrl">
 
-    <table>
+    <table class="table table-striped">
         <tr>
             <th><a ng-click="predicate = 'id'; reverse=false">ID</a></th>
-            <th><a ng-click="predicate = 'title'; reverse=false">Title</a></th>
-            <th><a ng-click="predicate = 'updated'; reverse=true">Updated</a></th>
-            <th>Actions</th>
+            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th><a ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
+            <th>Toiminnot</th>
         </tr>
         <tr>
             <td></td>
             <td class="editablefield"><input ng-model="newtitle"><div ng-if="error" class="error">!!!</div></td>
             <td class="editablefield"><input ng-model="newemail"></td>
-            <td></td>
-            <td><button ng-click="create()">Add product</button></td>
+            <td><button class="btn btn-default" ng-click="create()">Add product</button></td>
         </tr>
         <tr ng-repeat="product in products | orderBy:predicate:reverse">
             <td>{{ product.id }}</td>
@@ -25,14 +24,14 @@
                 <product-categories product="product"></product-categories>
                 <product-images product="product"></product-images>
                 <product-hidden product="product"></product-hidden>
-                <button ng-click="remove(product.id)"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-default" ng-click="remove(product.id)"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
         <tr>
             <th><a ng-click="predicate = 'id'; reverse=false">ID</a></th>
-            <th><a ng-click="predicate = 'title'; reverse=false">Title</a></th>
-            <th><a ng-click="predicate = 'updated'; reverse=true">Updated</a></th>
-            <th>Actions</th>
+            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th><a ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
+            <th>Toiminnot</th>
         </tr>
     </table>
 

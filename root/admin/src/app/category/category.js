@@ -1,7 +1,6 @@
 angular.module( 'admin.category', [
     'ngResource',
-    'ui.router',
-    'ui.bootstrap'
+    'ui.router'
 ])
 
 .config(function config($stateProvider) {
@@ -42,8 +41,7 @@ angular.module( 'admin.category', [
             $scope.count = $scope.count + 1;
             $rootScope.$emit('recalculate', 1, $scope.count);
         },function(error) {
-            $scope.error = true;
-            alert("Error! Check missing field.");
+            $scope.error = "Check missing fields!";
         });
         $scope.newcategory = null;
     };
@@ -71,7 +69,7 @@ angular.module( 'admin.category', [
 .directive('categoryPosition', function() {
     return {
         restrict: 'E',
-        template: '<select ng-model="selected" ng-options="counter as counter for counter in counters" ng-change="reorder()" ng-disabled="disabled"></select>',
+        templateUrl: 'category/position.tpl.html',
         scope: {
             'category': '=category',
             'count': '=count'
@@ -114,6 +112,42 @@ angular.module( 'admin.category', [
     };
 })
 
+.directive('categoryHidden', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'category/hidden.tpl.html',
+        scope: {
+            'category': '='
+        },
+        controller: function($scope, Category, removeobject) {
+            $scope.toggle = function() {
+                if ($scope.category.hidden == 1) {
+                    $scope.category.hidden = 0;
+                } else {
+                    $scope.category.hidden = 1;
+                }
+                Category.save({
+                    "id": $scope.category.id,
+                    "hidden": $scope.category.hidden
+                }).$promise.then(function(success) {
+                    //console.log(success);
+                },function(error) {
+                    console.log("ERROR!!!");
+                    // Error
+                });
+            };
+
+            $scope.$watch('category.hidden', function() {
+                if ($scope.category.hidden == 1) {
+                    $scope.code = "fa-toggle-off";
+                } else {
+                    $scope.code = "fa-toggle-on";
+                }
+            });
+        }
+    };
+})
+
 .directive('categoryTitle', function() {
     return {
         restrict: 'E',
@@ -148,7 +182,7 @@ angular.module( 'admin.category', [
 .directive('categoryRemove', function() {
     return {
         restrict: 'E',
-        template: '<button ng-click="remove()"><i class="fa fa-trash-o"></i> Poista</button>',
+        templateUrl: 'category/remove.tpl.html',
         scope: {
             'category': '=category'
         },

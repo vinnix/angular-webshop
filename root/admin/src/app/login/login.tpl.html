@@ -14,14 +14,26 @@
 
         <h1>Login</h1>
         
-        <h2 ng-show="error">{{ error }}</h2>
+        <div ng-if="error">
+            <alert type="danger">{{ error }}</alert>
+        </div>
 
-        <ul>
-            <li><label>Username: <input ng-model="username"></li>
-            <li><label>Password: <input type="password" ng-model="password"></li>
-            <li><button ng-click="login()">Login</button></li>
-        </ul>
-
+        <div class="form-group">
+            <div>
+                <label>
+                    Username:
+                    <input class="form-control" ng-model="username">
+                </label>
+            </div>
+            <div>
+                <label>
+                    Password:
+                    <input class="form-control" class="form-control" type="password" ng-model="password">
+                </label>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-default btn-primary" ng-click="login()">Login</button>
+        </div>
     </div>
-
 </div>
