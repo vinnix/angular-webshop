@@ -325,13 +325,13 @@ module.exports = function ( grunt ) {
       },
 
       /**
-       * These are the templates from `src/common`.
+       * These are the templates from vendors.
        */
       common: {
         options: {
-          base: 'src/common'
+          base: 'vendor/angular-ui-bootstrap'
         },
-        src: [ '<%= app_files.ctpl %>' ],
+        src: [ 'vendor/angular-ui-bootstrap/template/*/*.html' ],
         dest: '<%= build_dir %>/templates-common.js'
       }
     },
