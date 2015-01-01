@@ -71,6 +71,9 @@ module.exports = {
     css: [
     ],
     assets: [
+      'src/assets/*.png',
+      'src/assets/*.svg',
+      'src/assets/*.jpg'
     ]
   },
 };
