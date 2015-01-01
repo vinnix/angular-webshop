@@ -14,6 +14,8 @@ __PACKAGE__->add_columns(
     { data_type => "varchar", is_nullable => 1, size => 150 },
     "title",
     { data_type => "varchar", size => 250 },
+    "description",
+    { data_type => "text", is_nullable => 1 },
     "position",
     { data_type => "int", is_nullable => 1, default => 0 },
     "hidden",
