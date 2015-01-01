@@ -1,8 +1,9 @@
 angular.module( 'app', [
     'templates-app',
     'templates-common',
+    'ui.bootstrap.collapse',
     'app.home',
-    'app.about',
+    'app.info',
     'ui.router',
     'ngResource'
 ])
