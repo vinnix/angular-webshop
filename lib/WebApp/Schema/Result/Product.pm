@@ -57,4 +57,21 @@ __PACKAGE__->many_to_many(
     categories => 'productcategory', 'category',
 );
 
+__PACKAGE__->has_many(
+    productcolor => 'WebApp::Schema::Result::Productcolor',
+);
+
+__PACKAGE__->many_to_many(
+    colors => 'productcolor', 'color',
+);
+
+__PACKAGE__->has_many(
+    productsize => 'WebApp::Schema::Result::Productsize',
+);
+
+__PACKAGE__->many_to_many(
+    sizes => 'productsize', 'size',
+);
+
+
 1;
