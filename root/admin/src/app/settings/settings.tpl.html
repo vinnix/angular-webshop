@@ -1,8 +1,8 @@
 <div ng-controller="SettingsCtrl">
 
-    <h1>Settings</h1>
+    <h1>Asetukset</h1>
 
-    <h2>Password changing:</h2>
+    <h2>Salasanan vaihtaminen:</h2>
 
     <p>
         {{ message }}
@@ -10,25 +10,25 @@
 
     <div class="form-horizontal" ng-keydown="keyPressed($event)">
         <div class="form-group">
-            <label class="col-sm-2 control-label" for="oldpassword">Current password:</label>
+            <label class="col-sm-2 control-label" for="oldpassword">Nykyinen salasana:</label>
             <div class="col-sm-4">
                 <input class="form-control" id="oldpassword" type="password" ng-model="oldpassword"></label>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label" for="newpassword1">New password:</label>
+            <label class="col-sm-2 control-label" for="newpassword1">Uusi salasana:</label>
             <div class="col-sm-4">
                 <input class="form-control" id="newpassword1" type="password" ng-model="newpassword1">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label" for="newpassword2">(again):</label>
+            <label class="col-sm-2 control-label" for="newpassword2">Uusi salasana uudestaan:</label>
             <div class="col-sm-4">
                 <input class="form-control" id="newpassword2" type="password" ng-model="newpassword2">
             </div>
         </div>
     </div>
 
-    <button class="btn btn-default" ng-click="save()">Save</button>
+    <button class="btn btn-default btn-primary" ng-click="save()">Tallenna</button>
 
 </div>

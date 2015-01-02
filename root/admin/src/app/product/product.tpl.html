@@ -10,10 +10,10 @@
             <th>Toiminnot</th>
         </tr>
         <tr>
-            <td></td>
-            <td class="editablefield"><input ng-model="newtitle"><div ng-if="error" class="error">!!!</div></td>
-            <td class="editablefield"><input ng-model="newemail"></td>
-            <td><button class="btn btn-default" ng-click="create()">Add product</button></td>
+            <td class="col-md-1"></td>
+            <td class="col-md-6"><input class="form-control" ng-model="newtitle"></td>
+            <td class="col-md-1"></td>
+            <td class="col-md-4"><button class="btn btn-default" ng-click="create()">Lisää tuote</button></td>
         </tr>
         <tr ng-repeat="product in products | orderBy:predicate:reverse">
             <td>{{ product.id }}</td>

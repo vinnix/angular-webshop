@@ -1,5 +1,9 @@
-<div ng-hide="edit" ng-click="show()" class="textedit">{{ title }}</div>
-<div ng-show="edit" class="editor">
-    <input ng-model="edit">
-    <button class="btn btn-default" ng-click="save()"><i class="fa fa-thumbs-o-up"></i> Save</button>
+<div ng-hide="edit" ng-click="show()">
+	<p>{{ title }}</p>
+</div>
+<div ng-show="edit" class="input-group">
+    <input class="form-control" ng-model="edit">
+    <div class="input-group-btn">
+	    <button class="btn btn-default" ng-click="save()"><i class="fa fa-thumbs-o-up"></i> Save</button>
+	</div>
 </div>

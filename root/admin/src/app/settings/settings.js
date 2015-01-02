@@ -20,7 +20,7 @@ angular.module( 'admin.settings', [
 
 .controller('SettingsCtrl', function SettingsCtrl($scope, Setting) {
 
-    $scope.message = 'You can change your password by typing your current password and new password twice to the fields below.';
+    $scope.message = "Voit vaihtaa salasanasi kirjoittamalla nykyisen salasanasi ja uuden salasanan kahdesti allaoleviin kenttiin.";
     $scope.oldpassword = null;
     $scope.newpassword1 = null;
     $scope.newpassword2 = null;
@@ -32,7 +32,7 @@ angular.module( 'admin.settings', [
             "newpassword1": $scope.newpassword1,
             "newpassword2": $scope.newpassword2
         }).$promise.then(function(x) {
-            $scope.message = "Password changing successful.";
+            $scope.message = "Salasanan vaihtaminen onnistui!";
             $scope.oldpassword = null;
             $scope.newpassword1 = null;
             $scope.newpassword2 = null;
@@ -41,7 +41,7 @@ angular.module( 'admin.settings', [
             if (error.status === 403) {
                $rootScope.$emit('logout', 1);
             } else {
-                $scope.message = "Password changing failed.";
+                $scope.message = "Salasanan vaihtaminen epäonnistui.";
             }
         });
     };

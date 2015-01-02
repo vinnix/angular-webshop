@@ -4,22 +4,22 @@
 
     <table class="table table-striped">
         <tr>
-            <th>Järjestys</th>
-            <th>Otsikko</th>
+            <th><a ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
+            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
             <th>Toiminnot</th>
         </tr>
         <tr>
-            <td>
+            <td class="col-md-1">
                 &nbsp;
             </td>
-            <td>
-                <input type="text" ng-model="newcategory" ng-disabled="disabled">
+            <td class="col-md-8">
+                <input class="form-control" type="text" ng-model="newcategory" ng-disabled="disabled">
             </td>
-            <td>
+            <td class="col-md-3">
                 <button class="btn btn-default" ng-click="create()" ng-disabled="disabled"><i class="fa fa-star"></i> Luo uusi</button>
             </td>
         </tr>
-        <tr ng-repeat="category in categories | orderBy:'position':false">
+        <tr ng-repeat="category in categories | orderBy:predicate:reverse">
             <td>
                 <category-position category="category" count="count"></category-position>
             </td>
@@ -27,12 +27,12 @@
                 <category-title category="category"></category-title>
             </td>
             <td>
-                <category-remove category="category"></category-remove>
+                <button class="btn btn-default" ng-click="remove(category.id)"><i class="fa fa-trash"></i> Poista</button>
             </td>
         </tr>
         <tr>
-            <th>Järjestys</th>
-            <th>Otsikko</th>
+            <th><a ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
+            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
             <th>Toiminnot</th>
         </tr>
     </table>
