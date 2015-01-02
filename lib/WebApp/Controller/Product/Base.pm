@@ -17,14 +17,15 @@ sub create_slug {
     my ($product) = @_;
     my $slug = lc $product->title;
     $slug = unidecode($slug);
-    $slug =~ s/[^a-z0-9]//g;
+    $slug =~ s/[^a-z0-9\s]//g;
+    $slug =~ s/\s+/-/g;
 
     my $created_slug;
     my $index = 0;
     until ($created_slug and $index < 100) {
         my $slug_tmp;
         if ($index > 0) {
-            $slug_tmp = $slug . $index;
+            $slug_tmp = $slug . "-" . $index;
         } else {
             $slug_tmp = $slug;
         }
