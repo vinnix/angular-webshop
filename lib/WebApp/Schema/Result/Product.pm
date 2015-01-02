@@ -29,6 +29,10 @@ __PACKAGE__->add_columns(
     { data_type => "float", is_nullable => 1 },
     "discount",
     { data_type => "float", is_nullable => 1 },
+    "custom_image",
+    { data_type => "integer", is_nullable => 1 },
+    "custom_text",
+    { data_type => "integer", is_nullable => 1 },
     "hidden",
     { data_type => "integer", is_nullable => 1 },
 );
