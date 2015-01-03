@@ -83,5 +83,8 @@ __PACKAGE__->many_to_many(
     sizes => 'productsize', 'size',
 );
 
+__PACKAGE__->has_many(
+    productsold => 'WebApp::Schema::Result::Productsold',
+);
 
 1;
