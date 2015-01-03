@@ -23,8 +23,6 @@ __PACKAGE__->add_columns(
     { data_type => "text", is_nullable => 1 },
     "main_image",
     { data_type => "int", is_foreign_key => 1, is_nullable => 1 },
-    "payload",
-    { data_type => "json" },
     "vat",
     { data_type => "int", is_foreign_key => 1, is_nullable => 1 },
     "price",
