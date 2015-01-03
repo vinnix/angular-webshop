@@ -4,9 +4,9 @@ use warnings;
 use utf8;
 use lib 'lib';
 
-#use Env::Heroku::Cloudinary;
+binmode STDOUT, ':utf8';
+
 use Env::Heroku::Pg;
-use Env::Heroku::Rediscloud;
 use WebApp;
 use Encode qw(encode_utf8);
 use JSON;

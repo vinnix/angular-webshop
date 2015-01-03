@@ -6,6 +6,8 @@ use JSON qw(encode_json decode_json from_json);
 use Date::Parse;
 use Scalar::Util qw(looks_like_number);
 use Imager;
+use Cloudinary;
+use Mojo::IOLoop::Delay;
 use Digest::SHA qw( sha256_hex );
 use LWP::UserAgent;
 use Math::Round;
@@ -70,8 +72,6 @@ sub index_POST {
     my $tempfile;
     my $filename;
     my $params ||= $c->req->data || $c->req->params;
-
-print Dumper $params;
 
     if ($params->{src} and $params->{coords}) {
         # Get filename

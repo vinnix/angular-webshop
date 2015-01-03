@@ -32,6 +32,7 @@ requires 'boolean';
 requires 'Data::Dumper';
 requires 'Date::Parse';
 requires 'DateTime';
+requires 'DateTime::Format::HTTP';
 requires 'Digest::SHA';
 requires 'Imager';
 requires 'JSON';

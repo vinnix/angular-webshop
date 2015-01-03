@@ -1,0 +1,232 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use lib 'lib';
+
+binmode STDOUT, ':utf8';
+
+use Env::Heroku::Cloudinary;
+use Env::Heroku::Pg;
+use WebApp;
+use Encode qw(encode_utf8);
+use JSON;
+use LWP::UserAgent;
+use Text::Unidecode;
+use Math::Round;
+use DateTime::Format::HTTP;
+use Cloudinary;
+use Mojo::IOLoop::Delay;
+use Data::Dumper;
+
+die "[FATAL ERROR] Cloudinary environment variables missing" unless (
+        $ENV{CLOUDINARY_CLOUD} and
+        $ENV{CLOUDINARY_API_KEY} and
+        $ENV{CLOUDINARY_API_SECRET}
+    );
+
+my $cloudinary = Cloudinary->new(
+    cloud_name => $ENV{CLOUDINARY_CLOUD},
+    api_key => $ENV{CLOUDINARY_API_KEY},
+    api_secret => $ENV{CLOUDINARY_API_SECRET},
+);
+
+sub create_slug {
+    my ($str) = @_;
+    my $slug = lc $str;
+    $slug = unidecode($slug);
+    $slug =~ s/[^a-z0-9\s]//g;
+    $slug =~ s/\s+/-/g;
+
+    my $created_slug;
+    my $index = 0;
+    until ($created_slug and $index < 100) {
+        my $slug_tmp;
+        if ($index > 0) {
+            $slug_tmp = $slug . "-" . $index;
+        } else {
+            $slug_tmp = $slug;
+        }
+        my $prospect = WebApp->model("DB::Product")->search({
+            slug => $slug_tmp,
+        });
+        if (!$prospect->first) {
+            $created_slug =  $slug_tmp;
+        } else {
+            $index++;
+        }
+    }
+    return $created_slug;
+}
+
+sub format_title {
+	my ($title) = @_;
+	$title =~ s/^\s*//;
+	$title =~ s/\s*$//;
+	$title =~ s/\s+/ /g;
+	$title =~ s/^a[\.:]\s*//i;
+	$title =~ s/^x[\.:]\s*//i;
+	return $title;
+}
+
+sub create_and_link_category {
+	my ($product_id, $category_name) = @_;
+	return unless $category_name;
+	my $category = WebApp->model("DB::Category")->search({
+		title => format_title($category_name),
+	});
+	if ($category and $category->first) {
+		WebApp->model("DB::Productcategory")->find_or_create({
+			product => $product_id,
+			category => $category->first->id,
+		});
+	}
+}
+
+sub create_and_link_colors {
+	my ($product_id, $type, $colors) = @_;
+	return unless $colors and $type;
+	foreach my $color (@$colors) {
+		my ($realcolor) = split('\(', $color);
+		next unless $realcolor;
+		$realcolor =~ s/^\s*//;
+		$realcolor =~ s/\s*$//;
+		my $color_rs = WebApp->model("DB::Color")->find_or_create({ title => $realcolor, code => 'ffffff' });
+		my $productcolor_rs;
+		if ($type eq 'base') {
+			$productcolor_rs = WebApp->model("DB::Productbasecolor");
+		} else {
+			$productcolor_rs = WebApp->model("DB::Productprintcolor");
+		}
+		$productcolor_rs->find_or_create({
+			product => $product_id,
+			color => $color_rs->id,
+		});
+	}
+}
+
+sub create_and_link_sizes {
+	my ($product_id, $sizes) = @_;
+	return unless $sizes;
+	foreach my $size (@$sizes) {
+		my ($realsize) = split('\(', $size);
+		next unless $realsize;
+		$realsize =~ s/^\s*//;
+		$realsize =~ s/\s*$//;
+		my $size_rs = WebApp->model("DB::Size")->find_or_create({ title => $realsize });
+		WebApp->model("DB::Productsize")->find_or_create({
+			product => $product_id,
+			size => $size_rs->id,
+		});
+	}
+}
+
+sub create_and_link_image {
+	my ($product, $image_url) = @_;
+	return unless $image_url;
+    my $delay = Mojo::IOLoop::Delay->new;
+    my $end = $delay->begin;
+    $cloudinary->upload({
+        file => $image_url,
+        tags => [ 'product' ],
+    }, sub {
+        my ($data, $res) = @_;
+        die "ERROR: ".$res->{error} if $res->{error};
+        my $image = WebApp->model("DB::Image")->find_or_create({
+            link => $res->{url},
+            width => $res->{width},
+            height => $res->{height},
+            cloudinary_cloud_name => $ENV{CLOUDINARY_CLOUD},
+            cloudinary_public_id => $res->{public_id},
+        });
+        if ($image) {
+        	WebApp->model("DB::Productimage")->find_or_create({
+        		product => $product->id,
+        		image => $image->id,
+      		});
+        	$product->update({
+        		main_image => $image->id,
+      		});
+        }
+        $end->();
+    });
+    $delay->wait;
+}
+
+sub get_vat_id {
+	my ($vat) = @_;
+	return unless $vat;
+	my $vat_rs = WebApp->model("DB::Vat")->find_or_create({ amount => $vat+0 });
+	return $vat_rs->id;
+}
+
+my $products_url;
+if (@ARGV and $ARGV[0]) {
+    $products_url = $ARGV[0];
+}
+
+die "Products URL is not set!" unless $products_url;
+
+WebApp->model("DB::Product")->delete;
+my $ua = LWP::UserAgent->new;
+
+my $page = 1;
+my $json = $ua->get($products_url)->content;
+my $pager_data = decode_json($json);
+my $lastpage = round( $pager_data->{pagination}->{total_entries} / $pager_data->{pagination}->{entries_per_page} );
+while ($page <= $lastpage) {
+	print "Processing page ".$page." of ".$lastpage.":\n";
+	my $json = $ua->get($products_url."/".$page)->content;
+	my $data = decode_json($json);
+	for my $product (@{ $data->{'products'} }) {
+		my $hidden;
+		if ($product->{visible} and $product->{visible} ne '1') {
+			$hidden = 1;
+		}
+
+		my $title = format_title($product->{name});
+	    my $slug = create_slug($title);
+	    my $description = $product->{description};
+	    my $price = $product->{price_normal} + 0;
+	    my $specialprice = $product->{price_special} + 0;
+	    my $discount;
+	    if ($specialprice > 0) {
+	    	$discount = $price - $specialprice;
+	    }
+	    my $vat_id = get_vat_id($product->{vat});
+
+	    my $df = 'DateTime::Format::HTTP';
+	    my $created;
+	    if ($product->{date_created}) {
+	    	$created = $df->parse_datetime( $product->{date_created} );
+	    }
+	    my $updated;
+	    if ($product->{date_updated}) {
+	    	$updated = $df->parse_datetime( $product->{date_updated} );
+	    }
+
+		my $product_rs = WebApp->model("DB::Product")->create({
+			created => $created,
+			updated => $updated,
+			slug => $slug,
+			title => $title,
+			hidden => $hidden,
+			description => $description,
+			price => $price,
+			discount => $discount,
+			vat => $vat_id,
+			custom_image => $product->{enable_image_upload},
+			custom_text => $product->{enable_custom_text},
+		});
+
+		create_and_link_category($product_rs->id, $product->{group_name});
+		create_and_link_colors($product_rs->id, 'base', $product->{color_content});
+		create_and_link_colors($product_rs->id, 'print', $product->{color_body});
+		create_and_link_sizes($product_rs->id, $product->{size});
+		create_and_link_image($product_rs, $product->{image});
+
+		print "* Inserted product successfully: " . $title . "\n";
+	}
+	print "\n";
+	$page += 1;
+}
