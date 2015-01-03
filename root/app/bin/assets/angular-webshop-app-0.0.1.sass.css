@@ -5378,11 +5378,19 @@ header {
     header h1 img {
       width: auto;
       height: 100px; }
+      @media (max-width: 500px) {
+        header h1 img {
+          width: 100%;
+          height: auto; } }
   header .search {
     float: right;
     width: 300px;
     padding: 5px;
     margin-top: 72px; }
+    @media (max-width: 669px) {
+      header .search {
+        width: 100%;
+        margin: 0; } }
 
 .navbar-form {
   margin-left: 0;
