@@ -1,11 +1,11 @@
-package WebApp::Schema::Result::Productcolor;
+package WebApp::Schema::Result::Productbasecolor;
 use utf8;
 use strict;
 use warnings;
 
 use base 'DBIx::Class::Core';
 
-__PACKAGE__->table("productcolor");
+__PACKAGE__->table("productbasecolor");
 
 __PACKAGE__->add_columns(
     "product",

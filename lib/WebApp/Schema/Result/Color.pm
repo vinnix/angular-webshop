@@ -19,11 +19,18 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->has_many(
-    productcolor => 'WebApp::Schema::Result::Productcolor',
+    productbasecolor => 'WebApp::Schema::Result::Productbasecolor',
 );
 
 __PACKAGE__->many_to_many(
-    products => 'productcolor', 'product'
+    baseproducts => 'productbasecolor', 'product'
 );
 
+__PACKAGE__->has_many(
+    productprintcolor => 'WebApp::Schema::Result::Productprintcolor',
+);
+
+__PACKAGE__->many_to_many(
+    printproducts => 'productprintcolor', 'product'
+);
 1;

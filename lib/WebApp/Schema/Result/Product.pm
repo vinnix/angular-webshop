@@ -58,11 +58,19 @@ __PACKAGE__->many_to_many(
 );
 
 __PACKAGE__->has_many(
-    productcolor => 'WebApp::Schema::Result::Productcolor',
+    productbasecolor => 'WebApp::Schema::Result::Productbasecolor',
 );
 
 __PACKAGE__->many_to_many(
-    colors => 'productcolor', 'color',
+    basecolors => 'productbasecolor', 'color',
+);
+
+__PACKAGE__->has_many(
+    productprintcolor => 'WebApp::Schema::Result::Productprintcolor',
+);
+
+__PACKAGE__->many_to_many(
+    printcolors => 'productprintcolor', 'color',
 );
 
 __PACKAGE__->has_many(
