@@ -8,12 +8,20 @@ header {
 		img {
 			width: auto;
 			height: 100px;
+			@media (max-width: 500px) {
+				width: 100%;
+				height: auto;
+			}
 		}
 	}
 	.search {
 		float: right;
 		width: 300px;
 		padding: 5px;
-		margin-top: 72px
+		margin-top: 72px;
+		@media (max-width: 669px) {
+			width: 100%;
+			margin: 0;
+		}
 	}
 }
