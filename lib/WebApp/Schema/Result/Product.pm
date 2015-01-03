@@ -19,6 +19,8 @@ __PACKAGE__->add_columns(
     { data_type => "varchar", is_nullable => 1, size => 150 },
     "title",
     { data_type => "varchar", size => 250 },
+    "description",
+    { data_type => "text", is_nullable => 1 },
     "main_image",
     { data_type => "int", is_foreign_key => 1, is_nullable => 1 },
     "payload",
