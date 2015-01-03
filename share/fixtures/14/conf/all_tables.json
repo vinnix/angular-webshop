@@ -1,0 +1,81 @@
+{
+   "belongs_to" : {
+      "fetch" : 0
+   },
+   "sets" : [
+      {
+         "class" : "Image",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Product"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Session"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Productsize"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Order"
+      },
+      {
+         "class" : "SiteuserRole",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Productimage"
+      },
+      {
+         "class" : "Size",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Productcategory",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Color",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Category"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Siteuser"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Role"
+      },
+      {
+         "class" : "Productbasecolor",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Productprintcolor"
+      },
+      {
+         "class" : "Productsold",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Vat",
+         "quantity" : "all"
+      }
+   ],
+   "might_have" : {
+      "fetch" : 0
+   },
+   "has_many" : {
+      "fetch" : 0
+   }
+}
