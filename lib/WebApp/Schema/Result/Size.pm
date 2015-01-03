@@ -11,7 +11,7 @@ __PACKAGE__->add_columns(
     "id",
     { data_type => "int", is_auto_increment => 1 },
     "title",
-    { data_type => "varchar", size => 10 },
+    { data_type => "varchar", size => 50 },
 );
 
 __PACKAGE__->set_primary_key("id");
