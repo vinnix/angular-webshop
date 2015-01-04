@@ -4,7 +4,7 @@ angular.module( 'cloudinary-image', [
 .directive('cloudinaryImage', function() {
     return {
         restrict: 'E',
-        template: '<img ng-if="image" ng-src="{{ image }}">',
+        template: '<img ng-if="image" ng-src="{{ image }}" ng-class="imgClass">',
         scope: {
             'data': '='
         },
@@ -20,11 +20,13 @@ angular.module( 'cloudinary-image', [
                         width,
                         height;
 
+                    if ($attrs.imgClass) {
+                        $scope.imgClass = $attrs.imgClass;
+                    }
+
                     if ($attrs.size === 'auto') {
-                        // Uncomment this to get debug data
-                        //console.log($element.width(), $element.height(), $element.parent().width(), $element.parent().height());
-                        width = $element.parent()[0].offsetWidth ? Math.round($element.parent()[0].offsetWidth) : 0;
-                        height = $element.parent()[0].offsetHeight ? Math.round($element.parent()[0].offsetHeight) : 0;
+                        width = $element.parent()[0].offsetParent.clientWidth ? Math.round($element.parent()[0].offsetParent.clientWidth) : 0;
+                        height = $element.parent()[0].offsetParent.clientHeight ? Math.round($element.parent()[0].offsetParent.clientHeight) : 0;
                         if (width === 0 && height > 0) {
                             width = height;
                         } else if (height === 0 && width > 0) {
@@ -36,7 +38,7 @@ angular.module( 'cloudinary-image', [
                             } else {
                                 height = width;
                             }
-                        } else {
+                        } else if (width === 0 && height === 0) {
                             width = default_width;
                             height = default_height;
                         }
@@ -53,6 +55,10 @@ angular.module( 'cloudinary-image', [
                         image_url = image_url + 
                             'w_' + width + ',h_' + width +
                             ',c_thumb,r_max';
+                    } else if ($attrs.square) {
+                        image_url = image_url + 
+                            'w_' + width + ',h_' + width +
+                            ',c_thumb';
                     } else {
                         image_url = image_url + 
                             'w_' + width + ',h_' + height +
