@@ -34,6 +34,10 @@ sub index_GET {
                 id => $productimage->image->id,
                 link => $productimage->image->link,
                 is_main => $is_main,
+                cloudinary => {
+                    public_id => $productimage->image->cloudinary_public_id,
+                    cloud_name => $productimage->image->cloudinary_cloud_name,
+                },
             }
         }
 
@@ -64,6 +68,10 @@ sub index_POST {
                     id => $productimage->image->id,
                     link => $productimage->image->link,
                     is_main => false,
+                    cloudinary => {
+                        public_id => $productimage->image->cloudinary_public_id,
+                        cloud_name => $productimage->image->cloudinary_cloud_name,
+                    },
                 });
             } else {
                 $self->status_not_found($c, message => "image linking to product failed");
@@ -106,6 +114,10 @@ sub images_GET {
                 id => $productimage->image->id,
                 link => $productimage->image->link,
                 is_main => $is_main,
+                cloudinary => {
+                    public_id => $productimage->image->cloudinary_public_id,
+                    cloud_name => $productimage->image->cloudinary_cloud_name,
+                },
             });            
         } else {
             $self->status_not_found($c, message => "image not found");
@@ -132,6 +144,10 @@ sub images_POST {
                     id => $productimage->image->id,
                     link => $productimage->image->link,
                     is_main => $is_main,
+                    cloudinary => {
+                        public_id => $productimage->image->cloudinary_public_id,
+                        cloud_name => $productimage->image->cloudinary_cloud_name,
+                    },
                 });            
             } else {
                 $self->status_not_found($c, message => "setting main image failed");
