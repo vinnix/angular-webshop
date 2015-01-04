@@ -63,44 +63,26 @@ module.exports = {
   vendor_files: {
     js: [
       'vendor/jquery/dist/jquery.js',
-      'vendor/jquery-ui/jquery-ui.js',
       'vendor/angular/angular.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-checklist-model/checklist-model.js',
       'vendor/angular-cache-buster/angular-cache-buster.js',
-      'vendor/angular-ui-bootstrap/src/accordion/accordion.js',
-      'vendor/angular-ui-bootstrap/src/alert/alert.js',
-      'vendor/angular-ui-bootstrap/src/bindHtml/bindHtml.js',
-      'vendor/angular-ui-bootstrap/src/buttons/buttons.js',
-      'vendor/angular-ui-bootstrap/src/carousel/carousel.js',
-      'vendor/angular-ui-bootstrap/src/collapse/collapse.js',
-      'vendor/angular-ui-bootstrap/src/dateparser/dateparser.js',
-      'vendor/angular-ui-bootstrap/src/datepicker/datepicker.js',
-      'vendor/angular-ui-bootstrap/src/dropdown/dropdown.js',
-      'vendor/angular-ui-bootstrap/src/modal/modal.js',
-      'vendor/angular-ui-bootstrap/src/pagination/pagination.js',
-      'vendor/angular-ui-bootstrap/src/popover/popover.js',
-      'vendor/angular-ui-bootstrap/src/position/position.js',
-      'vendor/angular-ui-bootstrap/src/progressbar/progressbar.js',
-      'vendor/angular-ui-bootstrap/src/rating/rating.js',
-      'vendor/angular-ui-bootstrap/src/tabs/tabs.js',
-      'vendor/angular-ui-bootstrap/src/timepicker/timepicker.js',
-      'vendor/angular-ui-bootstrap/src/tooltip/tooltip.js',
-      'vendor/angular-ui-bootstrap/src/transition/transition.js',
-      'vendor/angular-ui-bootstrap/src/typeahead/typeahead.js',
+      'vendor/angular-ui-bootstrap/src/*/*.js',
       'vendor/ng-flow/dist/ng-flow-standalone.js',
-      'vendor/angular-ui-sortable/sortable.js',
-      'vendor/json-edit/js/directives.js'
+      'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
+      'vendor/angular-wysiwyg/angular-wysiwyg.js'
     ],
     css: [
-      'vendor/json-edit/css/styles.css'
+      'vendor/angular-bootstrap-colorpicker/css/colorpicker.css'
     ],
     assets: [
       'src/assets/*.png',
       'src/assets/*.svg',
-      'src/assets/*.jpg'
+      'src/assets/*.jpg',
+      'src/assets/*.gif',
+      'vendor/angular-bootstrap-colorpicker/img/*.png'
     ]
   },
 };
