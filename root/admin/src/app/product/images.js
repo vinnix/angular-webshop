@@ -1,56 +1,65 @@
 angular.module( 'admin.product.images', [
 	'admin.product.image',
-    'flow'
+    'flow',
+    'cloudinary-image',
+    'ui.bootstrap.modal'
 ])
 
 .directive('productImages', function() {
     return {
         restrict: 'E',
-        templateUrl: 'product/images.tpl.html',
+        template: '<button class="btn btn-default" ng-click="open()"><i class="fa fa-photo"></i></button>',
         scope: {
             'product': '='
         },
-        controller: function($scope, $rootScope, ProductImages, removeobject, containsid) {
-            $scope.edit = false;
-            $scope.show = function() {
-                $scope.edit = true;
-                $scope.images = [];
-                ProductImages.get({
-                    "product": $scope.product.id
-                }).$promise.then(function(success) {
-                    $scope.images = $scope.images.concat(success.images);
-                },function(error) {
-                    // Error
-                });
-            };
-
-            $scope.success = function(x) {
-                var image = JSON.parse(x);
-                ProductImages.save({
-                    "product": $scope.product.id,
-                    "newimage": image.id
-                }).$promise.then(function(success) {
-                    if (!containsid(success.id, $scope.images)) {
-                        $scope.images.push(success);
+        controller: function($scope, $modal, $log ) {
+            $scope.open = function() {
+                var modalInstance = $modal.open({
+                    templateUrl: 'product/images.tpl.html',
+                    controller: 'ImagesCtrl',
+                    size: 'lg',
+                    resolve: {
+                        product: function () {
+                            return $scope.product;
+                        }
                     }
-                },function(error) {
-                    console.log("ERROR!!!");
-                    // Error
                 });
             };
-
-            $scope.close = function() {
-                $scope.images = null;
-                $scope.edit = false;
-            };
-
-            $rootScope.$on('removeimage', function(e, id) {
-                if (id > 0) {
-                    $scope.images = removeobject($scope.images, id);
-                }
-            });
         }
     };
+})
+
+.controller('ImagesCtrl', function ($scope, $modalInstance, $rootScope, product, containsid, removeobject, ProductImages) {
+    $scope.product = product;
+    $scope.progress = false;
+
+    ProductImages.get({
+        "product": $scope.product.id
+    }).$promise.then(function(success) {
+        $scope.images = success.images;
+    });
+
+    $scope.success = function(x) {
+        var image = JSON.parse(x);
+        ProductImages.save({
+            "product": $scope.product.id,
+            "newimage": image.id
+        }).$promise.then(function(success) {
+            if (!containsid(success.id, $scope.images)) {
+                $scope.images.push(success);
+            }
+        });
+    };
+
+    $scope.close = function () {
+        $modalInstance.close();
+    };
+
+    $rootScope.$on('removeimage', function(e, id) {
+        if (id > 0) {
+            $scope.images = removeobject($scope.images, id);
+        }
+    });
 })
 
 ;

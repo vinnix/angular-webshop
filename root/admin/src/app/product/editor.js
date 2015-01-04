@@ -1,44 +1,50 @@
 angular.module( 'admin.product.editor', [
-    'JSONedit'
+    'wysiwyg.module'
 ])
 
 .directive('productEditor', function() {
     return {
         restrict: 'E',
-        templateUrl: 'product/editor.tpl.html',
+        template: '<button class="btn btn-default" ng-click="open()"><i class="fa fa-edit"></i></button>',
         scope: {
             'product': '='
         },
-        controller: function($scope, Product, removeobject) {
-
-            $scope.show = function() {
-                Product.get({
-                    "id": $scope.product.id
-                }).$promise.then(function(success) {
-                    $scope.edit = success.payload;
-                },function(error) {
-                    console.log("ERROR!!!");
-                    // Error
+        controller: function($scope, $modal) {
+            $scope.open = function() {
+                var modalInstance = $modal.open({
+                    templateUrl: 'product/editor.tpl.html',
+                    controller: 'EditorCtrl',
+                    size: 'lg',
+                    resolve: {
+                        product: function () {
+                            return $scope.product;
+                        }
+                    }
                 });
-            };
-
-            $scope.save = function() {
-                Product.save({
-                    "id": $scope.product.id,
-                    "payload": $scope.edit
-                }).$promise.then(function(success) {
-                    //console.log(success);
-                },function(error) {
-                    console.log("ERROR!!!");
-                    // Error
-                });
-                $scope.edit = false;
-            };
-
-            $scope.close = function() {
-                $scope.edit = false;
             };
         }
+    };
+})
+
+.controller('EditorCtrl', function ($scope, $modalInstance, $rootScope, product, Product) {
+    Product.get({
+        "id": product.id
+    }).$promise.then(function(success) {
+        $scope.edit = success;
+    });
+
+    $scope.save = function() {
+        Product.save({
+            "id": product.id,
+            "title": $scope.edit.title,
+            "description": $scope.edit.description
+        }).$promise.then(function(success) {
+            $scope.edit = success;
+        });
+    };
+
+    $scope.close = function () {
+        $modalInstance.close();
     };
 })
 

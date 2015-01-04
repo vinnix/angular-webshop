@@ -3,8 +3,7 @@ angular.module( 'admin.product', [
     'admin.product.categories',
     'admin.product.images',
     'admin.product.editor',
-    'admin.product.title',
-    'admin.product.hidden'
+    'ui.bootstrap.pagination'
 ])
 
 .config(function config($stateProvider) {
@@ -22,10 +21,17 @@ angular.module( 'admin.product', [
     });
 })
 
-.controller('ProductCtrl', function ProductCtrl($scope, $rootScope, Product, removeobject) {
+.controller('ProductCtrl', function ProductCtrl($scope, $filter, $rootScope, Product, removeobject) {
+    $scope.currentPage = 1;
+    $scope.itemsPerPage = 10;
+
     var productlist = function() {
         Product.get().$promise.then(function(x) {
-            $scope.products = x.products;
+            $scope.allProducts = x.products;
+            $scope.filteredProducts = x.products;
+            $scope.totalItems = x.products.length;
+            $scope.currentPage = 1;
+            pageChanged();
         }, function(error) {
             if (error.status === 403) {
                $rootScope.$emit('logout', 1);
@@ -53,11 +59,20 @@ angular.module( 'admin.product', [
         }
     };
 
+    $scope.hidden = function(product) {
+        Product.save({
+            "id": product.id,
+            "hidden": product.hidden
+        }).$promise.then(function(success) {
+            //console.log(success);
+        });
+    };
+
     $scope.create = function() {
         Product.save({
             "title": $scope.newtitle
         }).$promise.then(function(success) {
-            $scope.products.push(success);
+            $scope.allProducts.push(success);
             $scope.newtitle = null;
             $scope.error = false;
         }, function(error) {
@@ -71,6 +86,34 @@ angular.module( 'admin.product', [
             }
         });
     };
+
+    var pageChanged = function() {
+        if ($scope.filteredProducts) {
+            var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+                end = begin + $scope.itemsPerPage;
+            $scope.products = $scope.filteredProducts.slice(begin, end);
+        }
+    };
+
+    $scope.$watch('search', function(newvalue, oldvalue) {
+        if (newvalue) {
+            $scope.filteredProducts = $filter('filter')($scope.allProducts, newvalue);
+            $scope.currentPage = 1;
+            $scope.totalItems = $scope.filteredProducts.length;
+        }
+    });
+
+    $scope.$watch('currentPage', function(newvalue, oldvalue) {
+        if (newvalue) {
+            pageChanged();
+        }
+    });
+
+    $scope.$watch('filteredProducts', function(newvalue, oldvalue) {
+        if (newvalue) {
+            pageChanged();
+        }
+    });
 
     productlist();
 

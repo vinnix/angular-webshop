@@ -1,16 +1,19 @@
-<button class="btn btn-default" ng-click="show()"><i class="fa fa-photo"></i></button>
-<div ng-show="edit" class="dialog">
+<div class="dialog">
     <h3>Editing images <a ng-click="close()"><i class="fa fa-times"></i></a></h3>
-    <div class="images">
-        <div class="image" ng-repeat="image in images">
-            <show-image product="product" image="image"></show-image>
-        </div>
-        <div class="image upload" flow-init="{target: '/rest/image'}"
-            flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
-            flow-files-submitted="$flow.upload()"
-            flow-file-success="success($message)"
-            >
-            <img ng-src="{{ main.base_url + '/admin/assets/addimage.png' }}" flow-btn flow-attrs="{accept:'image/*'}" title="Lisää uusi kuva">
+    <div class="images clearfix">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 image" ng-repeat="image in images">
+                <show-image product="product" image="image"></show-image>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 upload"
+                ng-hide="progress" 
+                flow-init="{target: '/rest/image'}"
+                flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+                flow-files-submitted="$flow.upload(); progress = true;"
+                flow-file-success="success($message); progress = false;"
+                >
+                <img ng-src="{{ main.base_url + 'assets/addimage.png' }}" class="img-responsive img-rounded" flow-btn flow-attrs="{accept:'image/*'}" title="Lisää uusi kuva">
+            </div>
         </div>
     </div>
 </div>

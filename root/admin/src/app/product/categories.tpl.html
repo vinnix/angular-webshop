@@ -1,11 +1,10 @@
-<button class="btn btn-default" ng-click="show()" title="Kategorioiden valinta"><i class="fa fa-tag"></i></button>
-<div ng-show="edit" class="dialog">
+<div class="dialog">
     <h3>Kategorioiden valinta <a ng-click="close()"><i class="fa fa-times"></i></a></h3>
     <div class="categories">
-        <ul>
-            <li ng-repeat="category in categories">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" ng-repeat="category in categories">
                 <check-category product="product" category="category"></check-category>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
 </div>

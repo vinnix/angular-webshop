@@ -10,10 +10,6 @@ angular.module( 'admin.product.image', [
             'image': '='
         },
         controller: function($scope, $rootScope, ProductImages) {
-            $scope.style = {
-                'background-image': 'url('+$scope.image.link+')'
-            };
-
             $scope.remove = function() {
                 ProductImages.remove({
                     "product": $scope.product.id,
