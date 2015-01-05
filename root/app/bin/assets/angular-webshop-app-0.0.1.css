@@ -5372,7 +5372,7 @@ header {
   background-image: linear-gradient(to top, #006600, #009900);
   margin: 0;
   padding: 0; }
-  @media (max-width: 740px) {
+  @media (max-width: 782px) {
     header {
       text-align: center; } }
   header svg {
@@ -5384,7 +5384,7 @@ header {
     width: 300px;
     padding: 5px;
     margin-top: 114px; }
-    @media (max-width: 740px) {
+    @media (max-width: 782px) {
       header .search {
         width: 100%;
         margin: 0; } }
