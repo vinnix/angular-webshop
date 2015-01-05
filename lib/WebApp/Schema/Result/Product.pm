@@ -45,6 +45,14 @@ __PACKAGE__->belongs_to(
     main_image => 'WebApp::Schema::Result::Image',
 );
 
+__PACKAGE__->has_many(
+    productimage => 'WebApp::Schema::Result::Productimage',
+);
+
+__PACKAGE__->many_to_many(
+    images => 'productimage', 'image',
+);
+
 __PACKAGE__->might_have(
     vat => 'WebApp::Schema::Result::Vat',
 );
