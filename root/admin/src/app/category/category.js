@@ -21,7 +21,7 @@ angular.module( 'admin.category', [
     });
 })
 
-.controller('CategoryCtrl', function CategoryCtrl($scope, $rootScope, Category, removeobject) {
+.controller('CategoryCtrl', function CategoryCtrl($scope, $modal, $rootScope, Category, removeobject) {
 
     $scope.disable = false;
     $scope.categories = [];
@@ -38,24 +38,26 @@ angular.module( 'admin.category', [
         });
     };
 
-    $scope.remove = function(id) {
-        var retVal = confirm("Oletko varma että haluat poistaa tuoteryhmän "+id+"?");
-        if (retVal === true) {
-            Category.remove({ "id":id }).$promise.then(function(x) {
-                if (x.message == 'OK') {
-                    $scope.categories = removeobject($scope.categories, id);
+    $scope.remove = function(category) {
+        var modalInstance = $modal.open({
+            templateUrl: 'category/confirm.tpl.html',
+            controller: 'ConfirmCategoryCtrl',
+            size: 'lg',
+            resolve: {
+                category: function () {
+                    return category;
                 }
-            }, function(error) {
-                if (error.status === 403) {
-                   $rootScope.$emit('logout', 1);
-                } else {
-                    console.log("Error:",error.status);
+            }
+        });
+        modalInstance.result.then(function(category) {
+            Category.remove({
+                "id": category.id
+            }).$promise.then(function(x) {
+                if (x.message == 'OK') {
+                    $scope.categories = removeobject($scope.categories, category.id);
                 }
             });
-            return true;
-        } else {
-            return false;
-        }
+        });
     };
 
     $scope.create = function() {
@@ -91,4 +93,16 @@ angular.module( 'admin.category', [
 
 })
 
+
+.controller('ConfirmCategoryCtrl', function ($scope, $modalInstance, category) {
+    $scope.category = category;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.category);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+})
 ;

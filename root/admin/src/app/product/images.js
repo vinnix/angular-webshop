@@ -12,7 +12,7 @@ angular.module( 'admin.product.images', [
         scope: {
             'product': '='
         },
-        controller: function($scope, $modal, $log ) {
+        controller: function($scope, $modal) {
             $scope.btnClass = 'btn-default';
             $scope.open = function() {
                 var modalInstance = $modal.open({

@@ -31,10 +31,10 @@
         </tr>
         <tr>
             <td class="col-md-1"></td>
-            <td class="col-md-6"><input class="form-control" ng-model="newtitle"></td>
+            <td class="col-md-6"><input class="form-control" ng-model="newtitle" ng-disabled="!products"></td>
             <td class="col-md-1"></td>
             <td class="col-md-1"></td>
-            <td class="col-md-4"><button class="btn btn-default" ng-click="create()">Lisää tuote</button></td>
+            <td class="col-md-4"><button class="btn btn-default" ng-click="create()" ng-disabled="!products"><i class="fa fa-star"></i> Lisää tuote</button></td>
         </tr>
         <tr ng-repeat="product in products">
             <td>{{ product.id }}</td>
@@ -47,7 +47,7 @@
                 <product-editor product="product"></product-editor>
                 <product-categories product="product"></product-categories>
                 <product-images product="product"></product-images>
-                <button class="btn btn-danger" ng-click="remove(product.id)"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-danger" ng-click="remove(product)"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
         <tr>

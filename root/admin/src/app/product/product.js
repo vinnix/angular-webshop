@@ -21,7 +21,7 @@ angular.module( 'admin.product', [
     });
 })
 
-.controller('ProductCtrl', function ProductCtrl($scope, $filter, $rootScope, Product, removeobject) {
+.controller('ProductCtrl', function ProductCtrl($scope, $modal, $filter, $rootScope, Product, removeobject) {
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
     $scope.predicate = 'id';
@@ -32,7 +32,7 @@ angular.module( 'admin.product', [
         Product.get().$promise.then(function(x) {
             $scope.allProducts = $filter('orderBy')(x.products, $scope.predicate, $scope.reverse);
             $scope.filteredProducts = $scope.allProducts;
-            $scope.totalItems = x.products.length;
+            $scope.totalItems = $scope.filteredProducts.length;
             $scope.currentPage = 1;
             pageChanged();
         }, function(error) {
@@ -42,24 +42,29 @@ angular.module( 'admin.product', [
         });
     };
 
-    $scope.remove = function(id) {
-        var retVal = confirm("Oletko varma että haluat poistaa tuotteen "+id+"?");
-        if (retVal === true) {
-            Product.remove({ "id":id }).$promise.then(function(x) {
-                if (x.message == 'OK') {
-                    $scope.products = removeobject($scope.products, id);
+    $scope.remove = function(product) {
+        var modalInstance = $modal.open({
+            templateUrl: 'product/confirm.tpl.html',
+            controller: 'ConfirmProductCtrl',
+            size: 'lg',
+            resolve: {
+                product: function () {
+                    return product;
                 }
-            }, function(error) {
-                if (error.status === 403) {
-                   $rootScope.$emit('logout', 1);
-                } else {
-                    console.log("Error:",error.status);
+            }
+        });
+        modalInstance.result.then(function(product) {
+            Product.remove({
+                "id": product.id
+            }).$promise.then(function(x) {
+                if (x.message == 'OK') {
+                    $scope.allProducts = removeobject($scope.allProducts, product.id);
+                    $scope.filteredProducts = removeobject($scope.filteredProducts, product.id);
+                    $scope.totalItems = $scope.filteredProducts.length;
+                    pageChanged();
                 }
             });
-            return true;
-        } else {
-            return false;
-        }
+        });
     };
 
     $scope.hidden = function(product) {
@@ -128,6 +133,18 @@ angular.module( 'admin.product', [
 
     productlist();
 
+})
+
+.controller('ConfirmProductCtrl', function ($scope, $modalInstance, product) {
+    $scope.product = product;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.product);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
 })
 
 ;

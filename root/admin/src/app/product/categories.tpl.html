@@ -1,10 +1,13 @@
-<div class="dialog">
-    <h3>Kategorioiden valinta <a ng-click="close()"><i class="fa fa-times"></i></a></h3>
-    <div class="categories">
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" ng-repeat="category in categories">
-                <check-category product="product" category="category"></check-category>
-            </div>
-        </div>
-    </div>
+<div class="modal-header">
+    <h3 class="modal-title">Kategorioiden valinta</h3>
+</div>
+<div class="modal-body">
+	<div class="row">
+	    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" ng-repeat="category in categories">
+	        <check-category product="product" category="category"></check-category>
+	    </div>
+	</div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="close()">Valmis</button>
 </div>

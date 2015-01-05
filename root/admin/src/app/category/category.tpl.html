@@ -4,8 +4,8 @@
 
     <table class="table table-striped">
         <tr>
-            <th><a ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
-            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th><a ng-class="{active: predicate == 'position'}" ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
+            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
             <th>Toiminnot</th>
         </tr>
         <tr>
@@ -13,10 +13,10 @@
                 &nbsp;
             </td>
             <td class="col-md-8">
-                <input class="form-control" type="text" ng-model="newcategory" ng-disabled="disabled">
+                <input class="form-control" type="text" ng-model="newcategory" ng-disabled="!categories">
             </td>
             <td class="col-md-3">
-                <button class="btn btn-default" ng-click="create()" ng-disabled="disabled"><i class="fa fa-star"></i> Luo uusi</button>
+                <button class="btn btn-default" ng-click="create()" ng-disabled="!categories"><i class="fa fa-star"></i> Luo uusi</button>
             </td>
         </tr>
         <tr ng-repeat="category in categories | orderBy:predicate:reverse">
@@ -27,12 +27,12 @@
                 <category-title category="category"></category-title>
             </td>
             <td>
-                <button class="btn btn-danger" ng-click="remove(category.id)"><i class="fa fa-trash"></i> Poista</button>
+                <button class="btn btn-danger" ng-click="remove(category)"><i class="fa fa-trash"></i> Poista</button>
             </td>
         </tr>
         <tr>
-            <th><a ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
-            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th><a ng-class="{active: predicate == 'position'}" ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
+            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
             <th>Toiminnot</th>
         </tr>
     </table>
