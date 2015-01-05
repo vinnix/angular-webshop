@@ -2,7 +2,7 @@
 <html ng-app="app" ng-controller="AppCtrl" ng-init="main.base_url = '<: $base :>'">
     <head>
         <title ng-bind="pageTitle"></title>
-        <meta name="viewport" content="width=400, initial-scale=1.0, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <base href="<: $base :>">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
@@ -19,7 +19,7 @@
                         <button class="btn btn-default">Hae</button>
                     </div>
                 </div>
-                <h1><img ng-src="{{ main.base_url + 'assets/logopictext.svg' }}" alt="Paahine.net - Verkkokauppa"></h1>
+                <h1><inline-svg ng-src="{{ main.base_url + 'assets/logopictext.svg' }}"></inline-svg></h1>
             </div>
         </header>
         <div class="navbar navbar-inverse navbar-static-top">

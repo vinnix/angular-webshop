@@ -5,7 +5,8 @@ angular.module( 'app', [
     'app.home',
     'app.info',
     'ui.router',
-    'ngResource'
+    'ngResource',
+    'inline-svg'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider, $locationProvider ) {

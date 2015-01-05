@@ -5,13 +5,8 @@ header {
 	h1 {
 		padding: 10px;
 		margin: 0;
-		img {
-			width: auto;
-			height: 100px;
-			@media (max-width: 500px) {
-				width: 100%;
-				height: auto;
-			}
+		svg {
+			max-width: 400px;
 		}
 	}
 	.search {
@@ -19,7 +14,7 @@ header {
 		width: 300px;
 		padding: 5px;
 		margin-top: 72px;
-		@media (max-width: 669px) {
+		@media (max-width: 740px) {
 			width: 100%;
 			margin: 0;
 		}
