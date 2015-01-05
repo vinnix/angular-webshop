@@ -5419,4 +5419,9 @@ button.close {
   max-width: 600px;
   height: auto; }
 
+a {
+  cursor: pointer; }
+  a.active {
+    text-decoration: underline; }
+
 /*# sourceMappingURL=angular-webshop-admin-0.0.1.sass.css.map */
