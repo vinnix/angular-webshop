@@ -10,6 +10,7 @@ use Text::Unidecode;
 use DateTime;
 use DateTime::Format::Pg;
 use Time::HiRes;
+use boolean;
 
 BEGIN { extends 'WebApp::Controller::Root' }
 
@@ -59,6 +60,9 @@ sub index_GET {
             title => $product->title,
             updated => $product->updated ? $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
             hidden => $product->hidden,
+            categories => [ $product->categories ? $product->categories->get_column('id')->all : undef ],
+            images => [ $product->images ? $product->images->get_column('id')->all : undef ],
+            #images => $product->images ? true : false,
         };
     }
     $self->status_ok( $c, entity => {
