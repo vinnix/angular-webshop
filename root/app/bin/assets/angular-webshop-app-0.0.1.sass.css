@@ -5372,16 +5372,18 @@ header {
   background-image: linear-gradient(to top, #006600, #009900);
   margin: 0;
   padding: 0; }
-  header h1 {
+  @media (max-width: 740px) {
+    header {
+      text-align: center; } }
+  header svg {
     padding: 10px;
-    margin: 0; }
-    header h1 svg {
-      max-width: 400px; }
+    margin: 0;
+    max-width: 500px; }
   header .search {
     float: right;
     width: 300px;
     padding: 5px;
-    margin-top: 72px; }
+    margin-top: 114px; }
     @media (max-width: 740px) {
       header .search {
         width: 100%;
