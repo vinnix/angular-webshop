@@ -8,11 +8,12 @@ angular.module( 'admin.product.images', [
 .directive('productImages', function() {
     return {
         restrict: 'E',
-        template: '<button class="btn btn-default" ng-click="open()"><i class="fa fa-photo"></i></button>',
+        template: '<button class="btn" ng-class="btnClass" ng-click="open()"><i class="fa fa-photo"></i></button>',
         scope: {
             'product': '='
         },
         controller: function($scope, $modal, $log ) {
+            $scope.btnClass = 'btn-default';
             $scope.open = function() {
                 var modalInstance = $modal.open({
                     templateUrl: 'product/images.tpl.html',
@@ -25,6 +26,13 @@ angular.module( 'admin.product.images', [
                     }
                 });
             };
+            $scope.$watch('product', function(newvalue, oldvalue) {
+                if (newvalue) {
+                    if ($scope.product.images.length === 0) {
+                        $scope.btnClass = 'btn-warning';
+                    }
+                }
+            });
         }
     };
 })

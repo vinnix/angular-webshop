@@ -5,7 +5,7 @@ angular.module( 'admin.product.editor', [
 .directive('productEditor', function() {
     return {
         restrict: 'E',
-        template: '<button class="btn btn-default" ng-click="open()"><i class="fa fa-edit"></i></button>',
+        template: '<button class="btn btn-primary" ng-click="open()"><i class="fa fa-edit"></i></button>',
         scope: {
             'product': '='
         },

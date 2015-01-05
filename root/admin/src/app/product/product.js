@@ -24,11 +24,14 @@ angular.module( 'admin.product', [
 .controller('ProductCtrl', function ProductCtrl($scope, $filter, $rootScope, Product, removeobject) {
     $scope.currentPage = 1;
     $scope.itemsPerPage = 10;
+    $scope.predicate = 'id';
+    $scope.reverse = false;
+    $scope.search = null;
 
     var productlist = function() {
         Product.get().$promise.then(function(x) {
-            $scope.allProducts = x.products;
-            $scope.filteredProducts = x.products;
+            $scope.allProducts = $filter('orderBy')(x.products, $scope.predicate, $scope.reverse);
+            $scope.filteredProducts = $scope.allProducts;
             $scope.totalItems = x.products.length;
             $scope.currentPage = 1;
             pageChanged();
@@ -111,6 +114,14 @@ angular.module( 'admin.product', [
 
     $scope.$watch('filteredProducts', function(newvalue, oldvalue) {
         if (newvalue) {
+            pageChanged();
+        }
+    });
+
+    $scope.$watch('predicate', function(newvalue, oldvalue) {
+        if (newvalue) {
+            $scope.filteredProducts = $filter('orderBy')($scope.filteredProducts, $scope.predicate, $scope.reverse);
+            $scope.currentPage = 1;
             pageChanged();
         }
     });

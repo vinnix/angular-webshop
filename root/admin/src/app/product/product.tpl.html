@@ -4,7 +4,7 @@
 
     <div class="form-group">
         <label for="search">Hakusana(t):</label>
-        <input class="form-control" type="text" ng-model="search">
+        <input class="form-control" type="text" ng-model="search" ng-disabled="!products">
     </div>
 
     <pagination
@@ -23,10 +23,10 @@
 
     <table class="table table-striped table-relative">
         <tr>
-            <th><a ng-click="predicate = 'id'; reverse=false">ID</a></th>
-            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
-            <th><a ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
-            <th><a ng-click="predicate = 'hidden'; reverse=true">Piilossa</a></th>
+            <th><a ng-class="{active: predicate == 'id'}" ng-click="predicate = 'id'; reverse=false">ID</a></th>
+            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th><a ng-class="{active: predicate == 'updated'}" ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
+            <th><a ng-class="{active: predicate == 'hidden'}" ng-click="predicate = 'hidden'; reverse=true">Piilossa</a></th>
             <th>Toiminnot</th>
         </tr>
         <tr>
@@ -36,7 +36,7 @@
             <td class="col-md-1"></td>
             <td class="col-md-4"><button class="btn btn-default" ng-click="create()">Lisää tuote</button></td>
         </tr>
-        <tr ng-repeat="product in products | orderBy:predicate:reverse">
+        <tr ng-repeat="product in products">
             <td>{{ product.id }}</td>
             <td>{{ product.title }}</td>
             <td>{{ product.updated | date:'dd.MM.yyyy' }}</td>
@@ -51,10 +51,10 @@
             </td>
         </tr>
         <tr>
-            <th><a ng-click="predicate = 'id'; reverse=false">ID</a></th>
-            <th><a ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
-            <th><a ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
-            <th><a ng-click="predicate = 'hidden'; reverse=true">Piilossa</a></th>
+            <th><a ng-class="{active: predicate == 'id'}" ng-click="predicate = 'id'; reverse=false">ID</a></th>
+            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th><a ng-class="{active: predicate == 'updated'}" ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
+            <th><a ng-class="{active: predicate == 'hidden'}" ng-click="predicate = 'hidden'; reverse=true">Piilossa</a></th>
             <th>Toiminnot</th>
         </tr>
     </table>

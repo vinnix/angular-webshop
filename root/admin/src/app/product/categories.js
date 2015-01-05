@@ -5,11 +5,12 @@ angular.module( 'admin.product.categories', [
 .directive('productCategories', function() {
     return {
         restrict: 'E',
-        template: '<button class="btn btn-default" ng-click="open()" title="Kategorioiden valinta"><i class="fa fa-tag"></i></button>',
+        template: '<button class="btn" ng-class="btnClass" ng-click="open()" title="Kategorioiden valinta"><i class="fa fa-tag"></i></button>',
         scope: {
             'product': '='
         },
         controller: function($scope, $modal) {
+            $scope.btnClass = 'btn-default';
             $scope.open = function() {
                 var modalInstance = $modal.open({
                     templateUrl: 'product/categories.tpl.html',
@@ -22,6 +23,13 @@ angular.module( 'admin.product.categories', [
                     }
                 });
             };
+            $scope.$watch('product', function(newvalue, oldvalue) {
+                if (newvalue) {
+                    if ($scope.product.categories.length === 0) {
+                        $scope.btnClass = 'btn-warning';
+                    }
+                }
+            });
         }
     };
 })
