@@ -5636,7 +5636,7 @@ button.close {
   .hidden-print {
     display: none !important; } }
 header {
-  background-image: linear-gradient(to top, #006600, #009900);
+  background-image: linear-gradient(to top, #FF9900, #995C00);
   margin: 0;
   padding: 0; }
   @media (max-width: 992px) {

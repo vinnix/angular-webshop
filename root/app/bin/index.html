@@ -14,9 +14,9 @@
         <header class="header-full">
             <div class="container">
                 <div class="search input-group">
-                    <input class="form-control" type="text" id="searchField" ng-model="search" placeholder="Hae tuotteista">
+                    <input class="form-control" type="text" id="searchField" ng-model="search" placeholder="Search from products">
                     <div class="input-group-btn">
-                        <button class="btn btn-default">Hae</button>
+                        <button class="btn btn-default">Search</button>
                     </div>
                 </div>
                 <inline-svg ng-src="{{ main.base_url + 'assets/logopictext.svg' }}"></inline-svg>
@@ -34,16 +34,16 @@
                 </div>
                 <div class="navbar-collapse collapse" collapse="menuCollapsed" style="height: 1px;">
                     <ul class="nav navbar-nav">
-                        <li ui-sref-active="active"><a href ui-sref="home">Etusivu</a></li>
+                        <li ui-sref-active="active"><a href ui-sref="home">Frontpage</a></li>
                         <li ui-sref-active="active"><a href ui-sref="info">Info</a></li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">Ostoskori <span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown">Cart <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>Item #1</li>
                                 <li>Item #2</li>
                                 <li>Item #3</li>
                                 <li class="divider"></li>
-                                <li><a href="#">Ostoskoriin &raquo;</a></li>
+                                <li><a href="#">View Cart &raquo;</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -57,7 +57,7 @@
             <div class="container">
                 <div class="footer-inner">
                     <p>
-                        &copy; Paahine.net
+                        &copy; Jussi Kinnula
                     </p>
                 </div>
             </div>
