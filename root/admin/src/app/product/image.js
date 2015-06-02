@@ -28,8 +28,6 @@ angular.module( 'admin.product.image', [
                 }).$promise.then(function(success) {
                     $rootScope.$emit('newmainimage', $scope.image.id);
                     $scope.image.is_main = true;
-                },function(error) {
-                    // Error
                 });
             };
 

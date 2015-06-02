@@ -41,7 +41,7 @@
             <td>{{ product.title }}</td>
             <td>{{ product.updated | date:'dd.MM.yyyy' }}</td>
             <td>
-                <input class="form-control" type="checkbox" ng-model="product.hidden" ng-change="hidden(product)">
+                <input type="checkbox" ng-model="product.hidden" ng-change="hidden(product)">
             </td>
             <td>
                 <product-editor product="product"></product-editor>
@@ -50,27 +50,5 @@
                 <button class="btn btn-danger" ng-click="remove(product)"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
-        <tr>
-            <th><a ng-class="{active: predicate == 'id'}" ng-click="predicate = 'id'; reverse=false">ID</a></th>
-            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
-            <th><a ng-class="{active: predicate == 'updated'}" ng-click="predicate = 'updated'; reverse=true">Päivitetty</a></th>
-            <th><a ng-class="{active: predicate == 'hidden'}" ng-click="predicate = 'hidden'; reverse=true">Piilossa</a></th>
-            <th>Toiminnot</th>
-        </tr>
     </table>
-
-    <pagination
-        ng-model="currentPage"
-        total-items="totalItems"
-        items-per-page="itemsPerPage"
-        max-size="20"
-        direction-links="true"
-        boundary-links="true"
-        first-text="Alkuun"
-        previous-text="Edellinen"
-        next-text="Seuraava"
-        last-text="Viimeinen"
-        rotate="false">
-    </pagination>
-
 </div>

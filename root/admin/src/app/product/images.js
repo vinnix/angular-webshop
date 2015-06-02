@@ -41,21 +41,21 @@ angular.module( 'admin.product.images', [
     $scope.product = product;
     $scope.progress = false;
 
-    ProductImages.get({
-        "product": $scope.product.id
-    }).$promise.then(function(success) {
-        $scope.images = success.images;
-    });
+    var fetchimages = function() {
+        ProductImages.get({
+            "product": $scope.product.id
+        }).$promise.then(function(success) {
+            $scope.images = success.images;
+        });
+    }
 
-    $scope.success = function(x) {
-        var image = JSON.parse(x);
+    $scope.success = function(data) {
+        var image = JSON.parse(data);
         ProductImages.save({
             "product": $scope.product.id,
             "newimage": image.id
         }).$promise.then(function(success) {
-            if (!containsid(success.id, $scope.images)) {
-                $scope.images.push(success);
-            }
+            fetchimages();
         });
     };
 
@@ -68,6 +68,8 @@ angular.module( 'admin.product.images', [
             $scope.images = removeobject($scope.images, id);
         }
     });
+
+    fetchimages();
 })
 
 ;
