@@ -5833,4 +5833,14 @@ a {
   a.active {
     text-decoration: underline; }
 
+.grid-image button {
+  margin: 0.2em; }
+.grid-image img {
+  margin: 0.2em; }
+
+.navbar {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0; }
+
 /*# sourceMappingURL=angular-webshop-admin-0.0.1.sass.css.map */
