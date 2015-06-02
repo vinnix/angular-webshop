@@ -1,0 +1,31 @@
+.images {
+    .image {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        .buttons {
+            position: absolute;
+            margin-top: -45px;
+            margin-left: 5px;
+            button {
+                opacity: 0.5;
+                &:hover {
+                    cursor: pointer;
+                    opacity: 1.0;
+                }
+            }
+        }
+    }
+    .upload {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        img {
+            border: 1px solid gray;
+            opacity: 0.5;
+            &:hover {
+                border: 1px solid black;
+                cursor: pointer;
+                opacity: 1.0;
+            }
+        }
+    }
+}

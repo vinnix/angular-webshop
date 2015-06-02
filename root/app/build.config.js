@@ -16,8 +16,8 @@ module.exports = {
    * build tasks. `js` is all project javascript, less tests. `ctpl` contains
    * our reusable components' (`src/common`) template HTML files, while
    * `atpl` contains the same, but for our app's code. `html` is just our
-   * main HTML file, `sass` is our main stylesheet (less only includes some
-   * dependency styles), and `unit` contains our app's unit tests.
+   * main HTML file, `sass` is our main stylesheet and `unit` contains our 
+   * app's unit tests.
    */
   app_files: {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
@@ -30,7 +30,6 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
-    less: 'src/less/main.less',
     sass: 'src/sass/main.scss'
   },
 
@@ -63,15 +62,44 @@ module.exports = {
    */
   vendor_files: {
     js: [
+      'vendor/jquery/dist/jquery.js',
       'vendor/angular/angular.js',
-      'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
-      'vendor/angular-resource/angular-resource.js'
+      'vendor/angular-resource/angular-resource.js',
+      'vendor/bootstrap-sass-official/assets/javascripts/bootstrap-sprockets.js',
+      'vendor/bootstrap-sass-official/assets/javascripts/bootstrap.js',
+      'vendor/angular-ui-bootstrap/src/accordion/accordion.js',
+      'vendor/angular-ui-bootstrap/src/alert/alert.js',
+      'vendor/angular-ui-bootstrap/src/bindHtml/bindHtml.js',
+      'vendor/angular-ui-bootstrap/src/buttons/buttons.js',
+      'vendor/angular-ui-bootstrap/src/carousel/carousel.js',
+      'vendor/angular-ui-bootstrap/src/collapse/collapse.js',
+      'vendor/angular-ui-bootstrap/src/dateparser/dateparser.js',
+      'vendor/angular-ui-bootstrap/src/datepicker/datepicker.js',
+      'vendor/angular-ui-bootstrap/src/dropdown/dropdown.js',
+      'vendor/angular-ui-bootstrap/src/modal/modal.js',
+      'vendor/angular-ui-bootstrap/src/pagination/pagination.js',
+      'vendor/angular-ui-bootstrap/src/popover/popover.js',
+      'vendor/angular-ui-bootstrap/src/position/position.js',
+      'vendor/angular-ui-bootstrap/src/progressbar/progressbar.js',
+      'vendor/angular-ui-bootstrap/src/rating/rating.js',
+      'vendor/angular-ui-bootstrap/src/tabs/tabs.js',
+      'vendor/angular-ui-bootstrap/src/timepicker/timepicker.js',
+      'vendor/angular-ui-bootstrap/src/tooltip/tooltip.js',
+      'vendor/angular-ui-bootstrap/src/transition/transition.js',
+      'vendor/angular-ui-bootstrap/src/typeahead/typeahead.js'
     ],
     css: [
     ],
     assets: [
+      'vendor/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.eot',
+      'vendor/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.svg',
+      'vendor/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf',
+      'vendor/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.woff',
+      'src/assets/*.png',
+      'src/assets/*.svg',
+      'src/assets/*.jpg'
     ]
   },
 };

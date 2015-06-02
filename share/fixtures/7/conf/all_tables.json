@@ -1,0 +1,57 @@
+{
+   "has_many" : {
+      "fetch" : 0
+   },
+   "sets" : [
+      {
+         "class" : "Siteuser",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Order"
+      },
+      {
+         "class" : "Productimage",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Role",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Category",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Image",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "SiteuserRole"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Product"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Vat"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Session"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Productcategory"
+      }
+   ],
+   "belongs_to" : {
+      "fetch" : 0
+   },
+   "might_have" : {
+      "fetch" : 0
+   }
+}

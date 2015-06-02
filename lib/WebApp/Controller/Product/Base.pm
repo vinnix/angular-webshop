@@ -10,6 +10,7 @@ use Text::Unidecode;
 use DateTime;
 use DateTime::Format::Pg;
 use Time::HiRes;
+use boolean;
 
 BEGIN { extends 'WebApp::Controller::Root' }
 
@@ -17,14 +18,15 @@ sub create_slug {
     my ($product) = @_;
     my $slug = lc $product->title;
     $slug = unidecode($slug);
-    $slug =~ s/[^a-z0-9]//g;
+    $slug =~ s/[^a-z0-9\s]//g;
+    $slug =~ s/\s+/-/g;
 
     my $created_slug;
     my $index = 0;
     until ($created_slug and $index < 100) {
         my $slug_tmp;
         if ($index > 0) {
-            $slug_tmp = $slug . $index;
+            $slug_tmp = $slug . "-" . $index;
         } else {
             $slug_tmp = $slug;
         }
@@ -44,11 +46,6 @@ sub create_slug {
 }
 
 sub product_base : Chained("base") PathPart("product") CaptureArgs(0) {
-    my ($self, $c) = @_;
-    $c->stash->{default_payload} = 
-        encode_json({
-            description => undef,
-        });
 }
 
 sub index : Chained("product_base") PathPart("") ActionClass("REST") {
@@ -61,22 +58,22 @@ sub index_GET {
         push @products_data, {
             id => $product->id,
             title => $product->title,
-            updated => $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
+            updated => $product->updated ? $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
             hidden => $product->hidden,
+            categories => [ $product->categories ? $product->categories->get_column('id')->all : undef ],
+            images => [ $product->images ? $product->images->get_column('id')->all : undef ],
+            #images => $product->images ? true : false,
         };
     }
-    $self->status_ok( $c, entity => { products => \@products_data } );
+    $self->status_ok( $c, entity => {
+        products => \@products_data,
+    });
 }
 
 sub index_POST {
     my ($self, $c) = @_;
     my $params ||= $c->req->data || $c->req->params;
     if (length $params->{title} > 1) {
-        my $payload;
-        unless ($payload = $params->{payload}) {
-            $payload = $c->stash->{default_payload};
-        }
-
         my $current_time = DateTime->now->set_time_zone('Europe/Helsinki');
 
         my $product = $c->model("DB::Product")->create({
@@ -84,20 +81,24 @@ sub index_POST {
             created => DateTime::Format::Pg->format_datetime($current_time),
             updated => DateTime::Format::Pg->format_datetime($current_time),
             hidden => 1,
-            payload => $payload,
         });
 
         $product = create_slug($product);
 
         $self->status_ok( $c, entity => {
             id => $product->id,
-            title => $product->title,
             slug => $product->slug,
-            created => $product->created->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
-            updated => $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
+            title => $product->title,
+            description => $product->description,
+            created => $product->created ? $product->created->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
+            updated => $product->updated ? $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
             hidden => $product->hidden,
-            payload => from_json($product->payload),
             main_image => $product->main_image ? $product->main_image->link : undef,
+            hidden => $product->vat ? $product->vat->amount : undef,
+            price => $product->price,
+            discount => $product->discount,
+            custom_image => $product->custom_image,
+            custom_text => $product->custom_text,
         });
     } else {
         $self->status_not_found($c, message => "too short title");
@@ -131,13 +132,18 @@ sub product_GET {
         if (my $product = $c->model("DB::Product")->find($c->stash->{product_id})) {
             $self->status_ok( $c, entity => {
                 id => $product->id,
-                title => $product->title,
                 slug => $product->slug,
-                created => $product->created->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
-                updated => $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
+                title => $product->title,
+                description => $product->description,
+                created => $product->created ? $product->created->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
+                updated => $product->updated ? $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
                 hidden => $product->hidden,
-                payload => from_json($product->payload),
                 main_image => $product->main_image ? $product->main_image->link : undef,
+                hidden => $product->vat ? $product->vat->amount : undef,
+                price => $product->price,
+                discount => $product->discount,
+                custom_image => $product->custom_image,
+                custom_text => $product->custom_text,
             });
         } else {
             $self->status_not_found($c, message => "product not found");
@@ -165,27 +171,56 @@ sub product_POST {
                 $product = create_slug($product);
             }
 
+            if ($params->{description}) {
+                $product->update({
+                    description => $params->{description},
+                });                    
+            }
+
             if ($params->{hidden}) {
                 $product->update({
                     hidden => $params->{hidden},
                 });                    
             }
 
-            if ($params->{payload}) {
+            if ($params->{price}) {
                 $product->update({
-                    payload => encode_json($params->{payload}),
+                    price => $params->{price},
+                });                    
+            }
+
+            if ($params->{discount}) {
+                $product->update({
+                    discount => $params->{discount},
+                });                    
+            }
+
+            if ($params->{custom_image}) {
+                $product->update({
+                    custom_image => $params->{custom_image},
+                });                    
+            }
+
+            if ($params->{custom_text}) {
+                $product->update({
+                    custom_text => $params->{custom_text},
                 });                    
             }
 
             $self->status_ok( $c, entity => {
                 id => $product->id,
-                title => $product->title,
                 slug => $product->slug,
-                created => $product->created->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
-                updated => $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z'),
+                title => $product->title,
+                description => $product->description,
+                created => $product->created ? $product->created->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
+                updated => $product->updated ? $product->updated->strftime('%Y-%m-%dT%H:%M:%S.%6N%z') : undef,
                 hidden => $product->hidden,
-                payload => from_json($product->payload),
                 main_image => $product->main_image ? $product->main_image->link : undef,
+                hidden => $product->vat ? $product->vat->amount : undef,
+                price => $product->price,
+                discount => $product->discount,
+                custom_image => $product->custom_image,
+                custom_text => $product->custom_text,
             });
         } else {
             $self->status_not_found($c, message => "product not found");

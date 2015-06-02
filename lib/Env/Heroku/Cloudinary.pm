@@ -7,6 +7,8 @@ sub import {
     my ($self) = @_;
 
     my $cloudinaryurl = $ENV{CLOUDINARY_URL};
+    $cloudinaryurl =~ s/^\"//;
+    $cloudinaryurl =~ s/\"$//;
     if ( $cloudinaryurl and $cloudinaryurl =~ s/^cloudinary:// ) {
         my $url = URI->new( $cloudinaryurl, 'http' );
         $ENV{CLOUDINARY_CLOUD} = $url->host;

@@ -1,13 +1,14 @@
 use strict;
 use warnings;
 use utf8;
-use lib './lib';
+use lib 'lib';
 use Env::Heroku::Cloudinary;
 use Env::Heroku::Pg;
 use Env::Heroku::Rediscloud;
 use WebApp;
 use Plack::Builder;
 use Plack::Response;
+use Plack::Middleware::Static;
 use Text::Xslate;
 use Encode qw(encode_utf8);
 use Data::Dumper;
@@ -28,9 +29,13 @@ my $spa = sub { my ($root,$base) = @_; builder {
 
 builder {
     enable 'ReverseProxy';
+
+    enable "Plack::Middleware::Static",
+        path => qr{^/common/}, root => 'root/';
+
     enable 'ErrorDocument',
-        404 => 'root/assets/html/404.html',
-        500 => 'root/assets/html/500.html';
+        404 => 'root/common/html/404.html',
+        500 => 'root/common/html/500.html';
 
     mount '/rest' => $app;
     mount '/admin/build' => $spa->('root/admin/build','/admin/build/');

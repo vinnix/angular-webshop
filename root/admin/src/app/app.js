@@ -9,7 +9,8 @@ angular.module( 'admin', [
     'admin.product',
     'ui.router',
     'ngResource',
-    'ngCacheBuster'
+    'ngCacheBuster',
+    'ui.bootstrap.alert'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider, $locationProvider, httpRequestInterceptorCacheBusterProvider ) {
@@ -32,13 +33,13 @@ angular.module( 'admin', [
                 {
                     'orderer':1,
                     'link':'home',
-                    'title':'Home',
+                    'title':'Etusivu',
                     'awesome':'home'
                 },
                 {
                     'orderer':2,
                     'link':'settings',
-                    'title':'Settings',
+                    'title':'Asetukset',
                     'awesome':'wrench'
                 }
             ];
@@ -48,19 +49,19 @@ angular.module( 'admin', [
                     $scope.pages.push({
                         'orderer':3,
                         'link':'siteuser',
-                        'title':'Siteuser',
+                        'title':'Käyttäjät',
                         'awesome':'user'
                     });
                     $scope.pages.push({
                         'orderer':4,
                         'link':'category',
-                        'title':'Categories',
+                        'title':'Tuoteryhmät',
                         'awesome':'tags'
                     });
                     $scope.pages.push({
                         'orderer':5,
                         'link':'product',
-                        'title':'Products',
+                        'title':'Tuotteet',
                         'awesome':'suitcase'
                     });
                 }

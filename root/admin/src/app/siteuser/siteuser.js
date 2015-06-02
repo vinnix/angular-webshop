@@ -1,6 +1,5 @@
 angular.module( 'admin.siteuser', [
     'ui.router',
-    'ui.bootstrap',
     'checklist-model'
 ])
 
@@ -35,7 +34,7 @@ angular.module( 'admin.siteuser', [
     };
 
     $scope.openuser = function() {
-        $scope.mode = "Editing user information";
+        $scope.mode = "Käyttäjän tietojen muokkaus";
         Siteuser.get({
             id: $scope.siteuser
         }).$promise.then(function(x) {
@@ -61,7 +60,7 @@ angular.module( 'admin.siteuser', [
     };
 
     $scope.createuser = function() {
-        $scope.mode = "Creating new user";
+        $scope.mode = "Uuden käyttäjän luominen";
         $scope.edit = new Siteuser();
     };
 

@@ -1,0 +1,55 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use lib 'lib';
+
+binmode STDOUT, ':utf8';
+
+use Env::Heroku::Pg;
+use WebApp;
+use Encode qw(encode_utf8);
+use JSON;
+use LWP::UserAgent;
+use Text::Unidecode;
+use HTML::Strip;
+use Data::Dumper;
+
+my $categories_url;
+if (@ARGV and $ARGV[0]) {
+    $categories_url = $ARGV[0];
+}
+
+die "Categories URL is not set!" unless $categories_url;
+
+my $ua = LWP::UserAgent->new;
+my $hs = HTML::Strip->new();
+my $json = $ua->get($categories_url)->content;
+my $categories = decode_json($json);
+
+print "Start importing categories to CSV!\n\n";
+
+for my $category (@{ $categories->{'groups'} }) {
+
+	my $hidden;
+	if ($category->{visible} ne '1') {
+    	my $title = $category->{name};
+    	$title =~ s/^\s*//;
+    	$title =~ s/\s*$//;
+    	$title =~ s/\s+/ /g;
+    	$title =~ s/^a[\.:]\s*//i;
+    	$title =~ s/^x[\.:]\s*//i;
+
+        my $description = "";
+        if ($category->{description}) {
+            $description = $hs->parse( $category->{description} );
+            $description =~ s/\s+/ /g;
+            $description =~ s/^\s*//;
+            $description =~ s/\s*$//;
+        }
+
+        print $title . ";" . $description . ";\n";
+    }
+}
+
+print "\nDONE!\n\n";

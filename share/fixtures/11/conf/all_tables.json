@@ -1,0 +1,77 @@
+{
+   "might_have" : {
+      "fetch" : 0
+   },
+   "has_many" : {
+      "fetch" : 0
+   },
+   "sets" : [
+      {
+         "quantity" : "all",
+         "class" : "Color"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Role"
+      },
+      {
+         "class" : "Vat",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Productbasecolor"
+      },
+      {
+         "class" : "Order",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Size",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Product"
+      },
+      {
+         "class" : "Image",
+         "quantity" : "all"
+      },
+      {
+         "class" : "Productimage",
+         "quantity" : "all"
+      },
+      {
+         "class" : "SiteuserRole",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Productcategory"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Category"
+      },
+      {
+         "class" : "Productsize",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Session"
+      },
+      {
+         "class" : "Productprintcolor",
+         "quantity" : "all"
+      },
+      {
+         "quantity" : "all",
+         "class" : "Siteuser"
+      }
+   ],
+   "belongs_to" : {
+      "fetch" : 0
+   }
+}

@@ -16,8 +16,8 @@ module.exports = {
    * build tasks. `js` is all project javascript, less tests. `ctpl` contains
    * our reusable components' (`src/common`) template HTML files, while
    * `atpl` contains the same, but for our app's code. `html` is just our
-   * main HTML file, `sass` is our main stylesheet (less only includes some
-   * dependency styles), and `unit` contains our app's unit tests.
+   * main HTML file, `sass` is our main stylesheet and `unit` contains our 
+   * app's unit tests.
    */
   app_files: {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
@@ -30,7 +30,6 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
-    less: 'src/less/main.less',
     sass: 'src/sass/main.scss'
   },
 
@@ -64,23 +63,26 @@ module.exports = {
   vendor_files: {
     js: [
       'vendor/jquery/dist/jquery.js',
-      'vendor/jquery-ui/jquery-ui.js',
       'vendor/angular/angular.js',
-      'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
       'vendor/angular-resource/angular-resource.js',
       'vendor/angular-checklist-model/checklist-model.js',
       'vendor/angular-cache-buster/angular-cache-buster.js',
+      'vendor/angular-ui-bootstrap/src/*/*.js',
       'vendor/ng-flow/dist/ng-flow-standalone.js',
-      'vendor/angular-ui-sortable/sortable.js',
-      'vendor/json-edit/js/directives.js'
+      'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
+      'vendor/angular-wysiwyg/angular-wysiwyg.js'
     ],
     css: [
-      'vendor/json-edit/css/styles.css'
+      'vendor/angular-bootstrap-colorpicker/css/colorpicker.css'
     ],
     assets: [
-      'src/assets/*.png'
+      'src/assets/*.png',
+      'src/assets/*.svg',
+      'src/assets/*.jpg',
+      'src/assets/*.gif',
+      'vendor/angular-bootstrap-colorpicker/img/*.png'
     ]
   },
 };

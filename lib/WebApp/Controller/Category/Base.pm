@@ -10,6 +10,15 @@ use Text::Unidecode;
 
 BEGIN { extends 'WebApp::Controller::Root' }
 
+sub create_slug {
+    my ($self, $str) = @_;
+    return unless $str;
+    my $slug = lc $str;
+    $slug =~ s/[^a-z0-9\s]//g;
+    $slug =~ s/\s+/-/g;
+    return $slug;
+}
+
 sub category_base : Chained("base") PathPart("category") CaptureArgs(0) {
 }
 
@@ -22,8 +31,11 @@ sub index_GET {
     for my $category ($c->model("DB::Category")->all) {
         push @categories_data, {
             id => $category->id,
+            slug => $category->slug,
             title => $category->title,
+            description => $category->description,
             position => $category->position,
+            hidden => $category->hidden,
         };
     }
     $self->status_ok( $c, entity => { categories => \@categories_data } );
@@ -46,14 +58,19 @@ sub index_POST {
         }
 
         my $category = $c->model("DB::Category")->create({
+            slug => $self->create_slug($params->{title}),
             title => $params->{title},
             position => $position,
+            hidden => 1,
         });
 
         $self->status_ok( $c, entity => {
             id => $category->id,
+            slug => $category->slug,
             title => $category->title,
+            description => $category->description,
             position => $category->position,
+            hidden => $category->hidden,
         });
     } else {
         $self->status_forbidden($c, message => "access denied");
@@ -81,8 +98,11 @@ sub category_GET {
         if (my $category = $c->model("DB::Category")->find($c->stash->{category_id})) {
             $self->status_ok( $c, entity => {
                 id => $category->id,
+                slug => $category->slug,
                 title => $category->title,
+                description => $category->description,
                 position => $category->position,
+                hidden => $category->hidden,
             });
         } else {
             $self->status_not_found($c, message => "category not found");
@@ -97,14 +117,32 @@ sub category_POST {
     if ($c->check_user_roles("admin")) {
         my $params ||= $c->req->data || $c->req->params;
         if (my $category = $c->model("DB::Category")->find($c->stash->{category_id})) {
-            $category->update({
-                title => $params->{title},
-            });
+            if ($params->{title}) {
+                $category->update({
+                    slug => $self->create_slug($params->{title}),
+                    title => $params->{title},
+                });
+            }
+
+            if ($params->{description}) {
+                $category->update({
+                    description => $params->{description},
+                });
+            }
+
+            if ($params->{hidden}) {
+                $category->update({
+                    hidden => $params->{hidden},
+                });
+            }
 
             $self->status_ok( $c, entity => {
                 id => $category->id,
+                slug => $category->slug,
                 title => $category->title,
+                description => $category->description,
                 position => $category->position,
+                hidden => $category->hidden,
             });
         } else {
             $self->status_not_found($c, message => "category not found");

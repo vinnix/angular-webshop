@@ -1,27 +1,39 @@
-<h1>Categories</h1>
+<h1>Tuoteryhmät</h1>
 
 <div ng-controller="CategoryCtrl" class="content">
 
-    <table>
+    <table class="table table-striped">
         <tr>
-            <th>Order #</th>
-            <th>Title</th>
-            <th>Action</th>
+            <th><a ng-class="{active: predicate == 'position'}" ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
+            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th>Toiminnot</th>
         </tr>
         <tr>
-            <td>&nbsp;</td>
-            <td class="editablefieldfull"><input type="text" ng-model="newcategory" ng-disabled="disabled"><div ng-if="error" class="error">!!!</div></td>
-            <td class="action"><button ng-click="create()" ng-disabled="disabled"><i class="fa fa-star"></i> Create</button></td>
+            <td class="col-md-1">
+                &nbsp;
+            </td>
+            <td class="col-md-8">
+                <input class="form-control" type="text" ng-model="newcategory" ng-disabled="!categories">
+            </td>
+            <td class="col-md-3">
+                <button class="btn btn-default" ng-click="create()" ng-disabled="!categories"><i class="fa fa-star"></i> Luo uusi</button>
+            </td>
         </tr>
-        <tr ng-repeat="category in categories | orderBy:'position':false">
-            <td class="position"><category-position category="category" count="count"></category-position></td>
-            <td class="editablefieldfull"><category-title category="category"></category-title></td>
-            <td class="action"><category-remove category="category"></category-remove></td>
+        <tr ng-repeat="category in categories | orderBy:predicate:reverse">
+            <td>
+                <category-position category="category" count="count"></category-position>
+            </td>
+            <td>
+                <category-title category="category"></category-title>
+            </td>
+            <td>
+                <button class="btn btn-danger" ng-click="remove(category)"><i class="fa fa-trash"></i> Poista</button>
+            </td>
         </tr>
         <tr>
-            <th>Order #</th>
-            <th>Title</th>
-            <th>Action</th>
+            <th><a ng-class="{active: predicate == 'position'}" ng-click="predicate = 'position'; reverse=false">Järjestys</a></th>
+            <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Otsikko</a></th>
+            <th>Toiminnot</th>
         </tr>
     </table>
 

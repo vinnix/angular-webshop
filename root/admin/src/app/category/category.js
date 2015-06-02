@@ -1,7 +1,9 @@
 angular.module( 'admin.category', [
     'ngResource',
     'ui.router',
-    'ui.bootstrap'
+    'admin.category.position',
+    'admin.category.hidden',
+    'admin.category.title'
 ])
 
 .config(function config($stateProvider) {
@@ -19,11 +21,13 @@ angular.module( 'admin.category', [
     });
 })
 
-.controller('CategoryCtrl', function CategoryCtrl($scope, $rootScope, Category) {
+.controller('CategoryCtrl', function CategoryCtrl($scope, $modal, $rootScope, Category, removeobject) {
 
     $scope.disable = false;
     $scope.categories = [];
     $scope.count = 0;
+    $scope.predicate = "position";
+    $scope.reverse = false;
 
     var fetchcategories = function() {
         Category.get().$promise.then(function(success) {
@@ -31,6 +35,28 @@ angular.module( 'admin.category', [
             $scope.count = success.categories.length;
         },function(error) {
             console.log(error);
+        });
+    };
+
+    $scope.remove = function(category) {
+        var modalInstance = $modal.open({
+            templateUrl: 'category/confirm.tpl.html',
+            controller: 'ConfirmCategoryCtrl',
+            size: 'lg',
+            resolve: {
+                category: function () {
+                    return category;
+                }
+            }
+        });
+        modalInstance.result.then(function(category) {
+            Category.remove({
+                "id": category.id
+            }).$promise.then(function(x) {
+                if (x.message == 'OK') {
+                    $scope.categories = removeobject($scope.categories, category.id);
+                }
+            });
         });
     };
 
@@ -42,8 +68,7 @@ angular.module( 'admin.category', [
             $scope.count = $scope.count + 1;
             $rootScope.$emit('recalculate', 1, $scope.count);
         },function(error) {
-            $scope.error = true;
-            alert("Error! Check missing field.");
+            $scope.error = "Check missing fields!";
         });
         $scope.newcategory = null;
     };
@@ -68,104 +93,16 @@ angular.module( 'admin.category', [
 
 })
 
-.directive('categoryPosition', function() {
-    return {
-        restrict: 'E',
-        template: '<select ng-model="selected" ng-options="counter as counter for counter in counters" ng-change="reorder()" ng-disabled="disabled"></select>',
-        scope: {
-            'category': '=category',
-            'count': '=count'
-        },
-        controller: function($scope, $rootScope, CategoryPosition) {
-            var recalculate = function(count_str) {
-                $scope.counters = [];
-                var count = parseInt(count_str, 10);
-                for (i = 1; i <= count; i++) {
-                    $scope.counters.push(i);
-                }
-                $scope.selected = parseInt($scope.category.position, 10);
-            };
 
-            $scope.reorder = function(counter) {
-                CategoryPosition.save({
-                    id: $scope.category.id,
-                    position: $scope.selected
-                }).$promise.then(function(success) {
-                    $rootScope.$emit('reorder', 1);
-                },function(error) {
-                    console.log(error);
-                });
-            };
+.controller('ConfirmCategoryCtrl', function ($scope, $modalInstance, category) {
+    $scope.category = category;
 
-            $rootScope.$on('recalculate', function(x, id, count) {
-                recalculate(count);
-            });
+    $scope.ok = function () {
+        $modalInstance.close($scope.category);
+    };
 
-            $rootScope.$on('disableopen', function() {
-                $scope.disabled = true;
-            });
-
-            $rootScope.$on('enableopen', function() {
-                $scope.disabled = false;
-            });
-
-            recalculate($scope.count);
-        }
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
     };
 })
-
-.directive('categoryTitle', function() {
-    return {
-        restrict: 'E',
-        templateUrl: 'category/title.tpl.html',
-        scope: {
-            'category': '=category'
-        },
-        controller: function($scope, Category) {
-            $scope.title = $scope.category.title;
-            $scope.show = function() {
-                $scope.edit = $scope.category.title;
-            };
-
-            $scope.save = function() {
-                Category.save({
-                    "id": $scope.category.id,
-                    "title": $scope.edit
-                }).$promise.then(function(success) {
-                    //console.log(success);
-                },function(error) {
-                    console.log("ERROR!!!");
-                    // Error
-                });
-                $scope.category.title = $scope.edit;
-                $scope.title = $scope.edit;
-                $scope.edit = false;
-            };
-        }
-    };
-})
-
-.directive('categoryRemove', function() {
-    return {
-        restrict: 'E',
-        template: '<button ng-click="remove()"><i class="fa fa-trash-o"></i> Poista</button>',
-        scope: {
-            'category': '=category'
-        },
-        controller: function($scope, $rootScope, Category) {
-            $scope.remove = function() {
-                Category.remove({
-                    "id": $scope.category.id
-                }).$promise.then(function(success) {
-                    $rootScope.$emit('removeMeFromCategories', $scope.category.id);
-                },function(error) {
-                    console.log("ERROR!!!");
-                    // Error
-                });
-            };
-
-        }
-    };
-})
-
 ;

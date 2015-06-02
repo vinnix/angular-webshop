@@ -2,26 +2,38 @@
 
     <div ng-show="auth">
 
-        <h1>Already logged in</h1>
+        <h1>Olet jo sisäänkirjautunut</h1>
 
         <p>
-            Please logout to reauthenticate.
+            Ole hyvä ja kirjaudu ulos, kirjautuaksesi uudelleen sisään.
         </p>
 
     </div>
 
     <div ng-hide="auth" ng-keydown="keyPressed($event)" class="login">
 
-        <h1>Login</h1>
+        <h1>Kirjautuminen</h1>
         
-        <h2 ng-show="error">{{ error }}</h2>
+        <div ng-if="error">
+            <alert type="danger">{{ error }}</alert>
+        </div>
 
-        <ul>
-            <li><label>Username: <input ng-model="username"></li>
-            <li><label>Password: <input type="password" ng-model="password"></li>
-            <li><button ng-click="login()">Login</button></li>
-        </ul>
-
+        <div class="form-group">
+            <div>
+                <label>
+                    Käyttäjätunnus:
+                    <input class="form-control" ng-model="username">
+                </label>
+            </div>
+            <div>
+                <label>
+                    Salasana:
+                    <input class="form-control" class="form-control" type="password" ng-model="password">
+                </label>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-default btn-primary" ng-click="login()">Kirjaudu</button>
+        </div>
     </div>
-
 </div>

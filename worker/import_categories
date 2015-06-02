@@ -1,0 +1,88 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use lib 'lib';
+
+binmode STDOUT, ':utf8';
+
+use Env::Heroku::Pg;
+use WebApp;
+use Encode qw(encode_utf8);
+use JSON;
+use LWP::UserAgent;
+use Text::Unidecode;
+use Data::Dumper;
+
+sub create_slug {
+    my ($str) = @_;
+    my $slug = lc $str;
+    $slug = unidecode($slug);
+    $slug =~ s/[^a-z0-9\s]//g;
+    $slug =~ s/\s+/-/g;
+
+    my $created_slug;
+    my $index = 0;
+    until ($created_slug and $index < 100) {
+        my $slug_tmp;
+        if ($index > 0) {
+            $slug_tmp = $slug . "-" . $index;
+        } else {
+            $slug_tmp = $slug;
+        }
+        my $prospect = WebApp->model("DB::Category")->search({
+            slug => $slug_tmp,
+        });
+        if (!$prospect->first) {
+            $created_slug =  $slug_tmp;
+        } else {
+            $index++;
+        }
+    }
+    return $created_slug;
+}
+
+
+my $categories_url;
+if (@ARGV and $ARGV[0]) {
+    $categories_url = $ARGV[0];
+}
+
+die "Categories URL is not set!" unless $categories_url;
+
+my $ua = LWP::UserAgent->new;
+my $json = $ua->get($categories_url)->content;
+my $categories = decode_json($json);
+
+WebApp->model("DB::Category")->delete;
+
+my $position = 0;
+for my $category (@{ $categories->{'groups'} }) {
+
+	$position += 1;
+
+	my $hidden;
+	if ($category->{visible} ne '1') {
+		$hidden = 1;
+	}
+
+	my $title = $category->{name};
+	$title =~ s/^\s*//;
+	$title =~ s/\s*$//;
+	$title =~ s/\s+/ /g;
+	$title =~ s/^a[\.:]\s*//i;
+	$title =~ s/^x[\.:]\s*//i;
+
+    my $slug = create_slug($title);
+
+    my $description = $category->{description};
+
+	WebApp->model("DB::Category")->create({
+		slug => $slug,
+		title => $title,
+		position => $position,
+		hidden => $hidden,
+		description => $description,
+	});
+	print "Inserted category successfully: " . $title . "\n";
+}
