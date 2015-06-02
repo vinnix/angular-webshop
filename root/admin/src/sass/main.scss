@@ -11,3 +11,18 @@ a {
 		text-decoration: underline;
 	}
 }
+
+.grid-image {
+    button {
+        margin: 0.2em;
+    }
+    img {
+        margin: 0.2em;
+    }
+}
+
+.navbar {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
