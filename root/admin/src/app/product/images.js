@@ -47,7 +47,7 @@ angular.module( 'admin.product.images', [
         }).$promise.then(function(success) {
             $scope.images = success.images;
         });
-    }
+    };
 
     $scope.success = function(data) {
         var image = JSON.parse(data);
