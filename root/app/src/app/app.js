@@ -5,8 +5,7 @@ angular.module( 'app', [
     'app.home',
     'app.info',
     'ui.router',
-    'ngResource',
-    'inline-svg'
+    'ngResource'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider, $locationProvider ) {
@@ -25,7 +24,7 @@ angular.module( 'app', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
         if ( angular.isDefined( toState.data.pageTitle ) ) {
-            $scope.pageTitle = 'Paahine.net - ' + toState.data.pageTitle;
+            $scope.pageTitle = 'angular-webshop - ' + toState.data.pageTitle;
         }
     });
 })
