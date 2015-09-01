@@ -1,4 +1,4 @@
-angular.module( 'admin.product.editor', [
+angular.module( 'Admin.product.editor', [
     'wysiwyg.module'
 ])
 

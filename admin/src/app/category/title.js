@@ -1,4 +1,4 @@
-angular.module( 'admin.category.title', [
+angular.module( 'Admin.category.title', [
 ])
 
 .directive('categoryTitle', function() {

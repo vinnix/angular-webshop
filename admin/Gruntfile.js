@@ -11,6 +11,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-bump');
@@ -44,10 +45,6 @@ module.exports = function ( grunt ) {
       banner: 
         '/**\n' +
         ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        ' * <%= pkg.homepage %>\n' +
-        ' *\n' +
-        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-        ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
         ' */\n'
     },
 
@@ -139,6 +136,27 @@ module.exports = function ( grunt ) {
           }
         ]
       },
+      build_fonts: {
+        files: [
+          {
+            src: [ '<%= vendor_files.fonts %>' ],
+            dest: '<%= build_dir %>/fonts/',
+            cwd: '.',
+            expand: true,
+            flatten: true
+          }
+        ]
+      },
+      compile_fonts: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= compile_dir %>/fonts',
+            cwd: '<%= build_dir %>/fonts',
+            expand: true
+          }
+        ]
+      },
       compile_assets: {
         files: [
           {
@@ -162,6 +180,7 @@ module.exports = function ( grunt ) {
       build_css: {
         src: [
           '<%= vendor_files.css %>',
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.less.css',
           '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.sass.css'
         ],
         dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
@@ -233,6 +252,28 @@ module.exports = function ( grunt ) {
         },
         files: {
           '<%= concat.compile_js.dest %>': '<%= concat.compile_js.dest %>'
+        }
+      }
+    },
+
+    /**
+     * `grunt-contrib-less` handles our LESS compilation and uglification automatically.
+     * Only our `main.less` file is included in compilation; all other files
+     * must be imported from this file.
+     */
+    less: {
+      build: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.less.css': '<%= app_files.less %>'
+        }
+      },
+      compile: {
+        files: {
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.less.css': '<%= app_files.less %>'
+        },
+        options: {
+          cleancss: true,
+          compress: true
         }
       }
     },
@@ -495,6 +536,11 @@ module.exports = function ( grunt ) {
       /**
        * When the CSS files change, we need to compile and minify them.
        */
+      less: {
+        files: [ 'src/**/*.less' ],
+        tasks: [ 'less:build', 'concat:build_css' ]
+      },
+
       sass: {
         files: [ 'src/**/*.scss' ],
         tasks: [ 'sass:build', 'concat:build_css' ]
@@ -551,9 +597,9 @@ module.exports = function ( grunt ) {
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask( 'build', [
-    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'sass:build', 
+    'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build', 'sass:build', 
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets', 
-    'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_fonts', 'index:build', 
     'karmaconfig', 'karma:continuous' 
   ]);
 
@@ -562,7 +608,8 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'sass:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
+    'less:compile', 'sass:compile', 'copy:compile_assets', 'copy:compile_fonts',
+    'ngAnnotate', 'concat:compile_js', 'uglify', 'index:compile'
   ]);
 
   /**

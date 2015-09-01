@@ -1,4 +1,4 @@
-angular.module( 'admin.login', [
+angular.module( 'Admin.login', [
     'ui.router'
 ])
 
@@ -12,7 +12,7 @@ angular.module( 'admin.login', [
             }
         },
         data: {
-            pageTitle: 'Kirjautuminen'
+            pageTitle: 'Login'
         }
     });
 })
@@ -32,7 +32,7 @@ angular.module( 'admin.login', [
             $rootScope.$emit('login', 1);
             $state.transitionTo('home');
         },function(error) {
-            $scope.error = "Kirjautuminen epäonnistui!";
+            $scope.error = "Login incorrect!";
         });
     };
 

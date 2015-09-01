@@ -1,6 +1,7 @@
-angular.module( 'admin.siteuser', [
-    'ui.router',
-    'checklist-model'
+angular.module( 'Admin.siteuser', [
+    'Admin.siteuser.editor',
+    'Admin.siteuser.removal',
+    'ui.router'
 ])
 
 .config(function config($stateProvider) {
@@ -18,13 +19,12 @@ angular.module( 'admin.siteuser', [
     });
 })
 
-.controller('SiteuserCtrl', function SiteuserCtrl($scope, $rootScope, Siteuser, removeobject) {
-    var siteuserlist = function() {
-        $scope.siteusers = null;
+.controller('SiteuserCtrl', function SiteuserCtrl($scope, $modal, $rootScope, Siteuser) {
+    var siteuserList = function() {
+        $scope.siteusers = [];
         $scope.siteuser = null;
-        Siteuser.get().$promise.then(function(x) {
-            $scope.siteusers = x.siteusers;
-            $scope.siteuser = $scope.siteusers[0].id;
+        Siteuser.get().$promise.then(function(success) {
+            $scope.siteusers = success.siteusers;
         }, function(error) {
             console.log(error.status);
             if (error.status === 403) {
@@ -33,48 +33,74 @@ angular.module( 'admin.siteuser', [
         });
     };
 
-    $scope.openuser = function() {
-        $scope.mode = "Käyttäjän tietojen muokkaus";
-        Siteuser.get({
-            id: $scope.siteuser
-        }).$promise.then(function(x) {
-            $scope.edit = x;
-        }, function(error) {
-            console.log(error.status);
-            if (error.status === 403) {
-               $rootScope.$emit('logout', 1);
+    var openUserEditor = function(siteuser) {
+        var modalInstance = $modal.open({
+            templateUrl: 'siteuser/editor.tpl.html',
+            controller: 'SiteuserEditorCtrl',
+            resolve: {
+                siteuser: function () {
+                    return siteuser;
+                }
+            }
+        });
+        modalInstance.result.then(function(siteuser) {
+            if (siteuser.id && siteuser.id > 0) {
+                Siteuser.update({
+                    "id": siteuser.id,
+                    "username": siteuser.username,
+                    "password1": siteuser.password1,
+                    "password2": siteuser.password2,
+                    "first_name": siteuser.first_name,
+                    "last_name": siteuser.last_name,
+                    "email": siteuser.email,
+                    "roles": siteuser.roles,
+                }).$promise.then(function(success) {
+                    siteuserList();
+                });
+            } else {
+                Siteuser.save({
+                    "username": siteuser.username,
+                    "password1": siteuser.password1,
+                    "password2": siteuser.password2,
+                    "first_name": siteuser.first_name,
+                    "last_name": siteuser.last_name,
+                    "email": siteuser.email,
+                    "roles": siteuser.roles,
+                }).$promise.then(function(success) {
+                    siteuserList();
+                });
             }
         });
     };
 
-    $scope.removeuser = function() {
-       var editid = $scope.edit.id;
-        $scope.edit.$remove(function(x) {
-            $scope.edit = null;
-            $scope.mode = null;
+    $scope.removeSiteuser = function(siteuser) {
+        var modalInstance = $modal.open({
+            templateUrl: 'siteuser/removal.tpl.html',
+            controller: 'SiteuserRemovalCtrl',
+            resolve: {
+                siteuser: function () {
+                    return siteuser;
+                }
+            }
         });
-        if (editid > 0) {
-            $scope.siteusers = removeobject($scope.siteusers, editid);
-            $scope.siteuser = $scope.siteusers[0].id;
-        }
-    };
-
-    $scope.createuser = function() {
-        $scope.mode = "Uuden käyttäjän luominen";
-        $scope.edit = new Siteuser();
-    };
-
-    $scope.saveuser = function() {
-        if ($scope.edit.id) {
-            $scope.siteusers = removeobject($scope.siteusers, $scope.edit.id);
-        }
-        $scope.edit.$save(function(x) {
-            $scope.siteusers.push(x);
-            $scope.siteuser = x.id;
+        modalInstance.result.then(function(siteuser) {
+            Siteuser.remove({
+                "id": siteuser.id
+            }).$promise.then(function(success) {
+                siteuserList();
+            });
         });
     };
 
-    siteuserlist();
+    $scope.createSiteuser = function() {
+        openUserEditor();
+    };
+
+    $scope.editSiteuser = function(siteuser) {
+        openUserEditor(siteuser);
+    };
+
+    siteuserList();
 
 })
 

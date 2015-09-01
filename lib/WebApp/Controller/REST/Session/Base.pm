@@ -31,10 +31,11 @@ sub session_GET {
 
 sub session_POST {
     my ($self, $c) = @_;
-    if ($c->req->data and $c->req->data->{username} and $c->req->data->{password}) {
-        if ($c->authenticate({ username => $c->req->data->{username}, password => $c->req->data->{password} })) {
+    my $params ||= $c->req->data || $c->req->params;
+    if ($params and $params->{username} and $params->{password}) {
+        if ($c->authenticate({ username => $params->{username}, password => $params->{password} }, 'siteuser')) {
             $self->status_ok( $c, entity => {
-                username => $c->req->data->{username},
+                username => $params->{username},
                 session => $c->sessionid,
                 roles => [ $c->user->roles() ],
             });

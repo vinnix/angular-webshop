@@ -1,0 +1,77 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{ title }}</h3>
+</div>
+<div class="modal-body">
+
+    <h4>User information</h4>
+
+    <div class="form-horizontal">
+        <div class="form-group" ng-class="{ 'bg-success': (!invalidEmail && emailChanged) , 'bg-danger': invalidEmail }">
+            <label class="col-sm-4 control-label" for="email">E-mail:</label>
+            <div class="col-sm-6">
+                <p ng-show="invalidEmail && siteuser.email.length < 6" class="help-block">E-mail address is too short!</p>
+                <p ng-show="invalidEmail && siteuser.email.length >= 6 && siteuser.email.length <= 50" class="help-block">E-mail is already registered to another user!</p>
+                <p ng-show="invalidEmail && siteuser.email.length > 50" class="help-block">E-mail address is too long!</p>
+                <input class="form-control input-sm" id="email" type="text" ng-model="siteuser.email" ng-change="validateEmail(siteuser.email)">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'bg-success': (!invalidUsername && usernameChanged), 'bg-danger': invalidUsername }">
+            <label class="col-sm-4 control-label" for="username">Username:</label>
+            <div class="col-sm-6">
+                <p ng-show="invalidUsername && siteuser.username.length < 4" class="help-block">Username it too short!</p>
+                <p ng-show="invalidUsername && siteuser.username.length >= 4 && siteuser.username.length <= 50" class="help-block">Username is already registered to another user!</p>
+                <p ng-show="invalidUsername && siteuser.username.length > 50" class="help-block">Username it too long!</p>
+                <input class="form-control input-sm" id="username" type="text" ng-model="siteuser.username" ng-change="validateUsername(siteuser.username)">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'bg-success': (!invalidPassword && passwordChanged), 'bg-danger':invalidPassword }">
+            <label class="col-sm-4 control-label" for="password1">Password:</label>
+            <div class="col-sm-6">
+                <p ng-show="invalidPassword && siteuser.password1.length < 6" class="help-block">Password too short!</p>
+                <p ng-show="invalidPassword && siteuser.password1.length > 50 && siteuser.password1 === siteuser.password2" class="help-block">Username it too long!</p>
+                <input class="form-control input-sm" id="password1" type="password" ng-model="siteuser.password1" ng-change="validatePasswords(siteuser.password1, siteuser.password2)">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'bg-success': (!invalidPassword && passwordChanged), 'bg-danger':invalidPassword }">
+            <label class="col-sm-4 control-label" for="password2">Password (again):</label>
+            <div class="col-sm-6">
+                <p ng-show="invalidPassword && siteuser.password1.length >= 6 && !siteuser.password2" class="help-block">Confirm the password!</p>
+                <p ng-show="invalidPassword && siteuser.password1.length >= 6 && siteuser.password2.length > 0 && siteuser.password1 !== siteuser.password2" class="help-block">Passwords do not match!</p>
+                <input class="form-control input-sm" id="password2" type="password" ng-model="siteuser.password2" ng-change="validatePasswords(siteuser.password1, siteuser.password2)">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="first_name">Firstname:</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" id="first_name" type="text" ng-model="siteuser.first_name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="last_name">Lastname:</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" id="last_name" type="text" ng-model="siteuser.last_name">
+            </div>
+        </div>
+    </div>
+
+    <h4>Roles:</h4>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3" ng-repeat="role in roles | orderBy:'name'">
+                <label class="control-label">
+                    <input type="checkbox" checklist-model="siteuser.roles" checklist-value="role.id">
+                    {{ role.name }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer row">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <button class="btn btn-danger btn-block" ng-click="cancel()">Cancel</button>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <button class="btn btn-primary btn-block" ng-click="save()" ng-disabled="!canSubmit">Save User</button>
+    </div>
+</div>

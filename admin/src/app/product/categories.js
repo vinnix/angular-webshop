@@ -1,5 +1,5 @@
-angular.module( 'admin.product.categories', [
-	'admin.product.category'
+angular.module( 'Admin.product.categories', [
+	'Admin.product.category'
 ])
 
 .directive('productCategories', function() {

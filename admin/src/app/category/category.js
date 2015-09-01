@@ -1,9 +1,10 @@
-angular.module( 'admin.category', [
+angular.module( 'Admin.category', [
     'ngResource',
     'ui.router',
-    'admin.category.position',
-    'admin.category.hidden',
-    'admin.category.title'
+    'Admin.category.position',
+    'Admin.category.hidden',
+    'Admin.category.title',
+    'Admin.category.confirm'
 ])
 
 .config(function config($stateProvider) {
@@ -93,16 +94,4 @@ angular.module( 'admin.category', [
 
 })
 
-
-.controller('ConfirmCategoryCtrl', function ($scope, $modalInstance, category) {
-    $scope.category = category;
-
-    $scope.ok = function () {
-        $modalInstance.close($scope.category);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-})
 ;

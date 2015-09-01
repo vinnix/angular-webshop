@@ -1,19 +1,19 @@
-<div ng-controller="LoginCtrl" class="content">
+<div ng-controller="LoginCtrl">
 
     <div ng-show="auth">
 
-        <h1>Olet jo sisäänkirjautunut</h1>
+        <h1>Already logged in</h1>
 
         <p>
-            Ole hyvä ja kirjaudu ulos, kirjautuaksesi uudelleen sisään.
+            You have already been logged in. Please logout first to do re-login.
         </p>
 
     </div>
 
-    <div ng-hide="auth" ng-keydown="keyPressed($event)" class="login">
+    <div ng-hide="auth" ng-keydown="keyPressed($event)">
 
-        <h1>Kirjautuminen</h1>
-        
+        <h1>Login</h1>
+
         <div ng-if="error">
             <alert type="danger">{{ error }}</alert>
         </div>
@@ -21,19 +21,19 @@
         <div class="form-group">
             <div>
                 <label>
-                    Käyttäjätunnus:
+                    Username:
                     <input class="form-control" ng-model="username">
                 </label>
             </div>
             <div>
                 <label>
-                    Salasana:
+                    Password:
                     <input class="form-control" class="form-control" type="password" ng-model="password">
                 </label>
             </div>
         </div>
         <div>
-            <button class="btn btn-default btn-primary" ng-click="login()">Kirjaudu</button>
+            <button class="btn btn-default btn-primary" ng-click="login()">Login</button>
         </div>
     </div>
 </div>

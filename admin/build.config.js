@@ -16,13 +16,13 @@ module.exports = {
    * build tasks. `js` is all project javascript, less tests. `ctpl` contains
    * our reusable components' (`src/common`) template HTML files, while
    * `atpl` contains the same, but for our app's code. `html` is just our
-   * main HTML file, `sass` is our main stylesheet and `unit` contains our 
+   * main HTML file, `less` is our main stylesheet, and `unit` contains our
    * app's unit tests.
    */
   app_files: {
     js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
     jsunit: [ 'src/**/*.spec.js' ],
-    
+
     coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
     coffeeunit: [ 'src/**/*.spec.coffee' ],
 
@@ -30,6 +30,7 @@ module.exports = {
     ctpl: [ 'src/common/**/*.tpl.html' ],
 
     html: [ 'src/index.html' ],
+    less: 'src/less/main.less',
     sass: 'src/sass/main.scss'
   },
 
@@ -64,25 +65,35 @@ module.exports = {
     js: [
       'vendor/jquery/dist/jquery.js',
       'vendor/angular/angular.js',
+      'vendor/angular-resource/angular-resource.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
-      'vendor/angular-resource/angular-resource.js',
       'vendor/angular-checklist-model/checklist-model.js',
       'vendor/angular-cache-buster/angular-cache-buster.js',
       'vendor/angular-ui-bootstrap/src/*/*.js',
       'vendor/ng-flow/dist/ng-flow-standalone.js',
       'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
-      'vendor/angular-wysiwyg/angular-wysiwyg.js'
+      'vendor/angular-wysiwyg/dist/angular-wysiwyg.js'
     ],
     css: [
-      'vendor/angular-bootstrap-colorpicker/css/colorpicker.css'
     ],
     assets: [
       'src/assets/*.png',
       'src/assets/*.svg',
       'src/assets/*.jpg',
-      'src/assets/*.gif',
-      'vendor/angular-bootstrap-colorpicker/img/*.png'
+      'src/assets/*.gif'
+    ],
+    fonts: [
+      'vendor/bootstrap/fonts/glyphicons-halflings-regular.eot',
+      'vendor/bootstrap/fonts/glyphicons-halflings-regular.svg',
+      'vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf',
+      'vendor/bootstrap/fonts/glyphicons-halflings-regular.woff',
+      'vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2',
+      'vendor/font-awesome/fonts/fontawesome-webfont.eot',
+      'vendor/font-awesome/fonts/fontawesome-webfont.svg',
+      'vendor/font-awesome/fonts/fontawesome-webfont.ttf',
+      'vendor/font-awesome/fonts/fontawesome-webfont.woff',
+      'vendor/font-awesome/fonts/fontawesome-webfont.woff2'
     ]
   },
 };

@@ -1,17 +1,21 @@
 <div class="modal-header">
-    <h3>Kenttien muokkaus</h3>
+    <h3>Fields Editor</h3>
 </div>
 <div class="modal-body">
     <div class="form-group">
-        <label class="control-label" for="title">Otsikko:</label>
+        <label class="control-label" for="title">Title:</label>
         <input class="form-control input-sm" id="title" type="text" ng-model="edit.title">
     </div>
     <div class="form-group">
-    	<label class="control-label" for="description">Kuvaus:</label>
+    	<label class="control-label" for="description">Description:</label>
 	    <wysiwyg ng-model="description" textarea-class="form-control" textarea-id="edit.description" textarea-height="250px"></wysiwyg>
 	</div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" ng-click="save()"><i class="fa fa-thumbs-o-up"></i> Tallenna</button>
-    <button class="btn btn-default" ng-click="close()"><i class="fa fa-thumbs-o-down"></i> Sulje</button>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <button class="btn btn-default" ng-click="save()"><i class="fa fa-thumbs-o-up"></i> Save</button>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <button class="btn btn-default" ng-click="close()"><i class="fa fa-thumbs-o-down"></i> Cancel</button>
+    </div>
 </div>

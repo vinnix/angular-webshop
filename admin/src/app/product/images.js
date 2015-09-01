@@ -1,5 +1,5 @@
-angular.module( 'admin.product.images', [
-	'admin.product.image',
+angular.module( 'Admin.product.images', [
+	'Admin.product.image',
     'flow',
     'cloudinary-image',
     'ui.bootstrap.modal'
@@ -37,7 +37,7 @@ angular.module( 'admin.product.images', [
     };
 })
 
-.controller('ImagesCtrl', function ($scope, $modalInstance, $rootScope, product, containsid, removeobject, ProductImages) {
+.controller('ImagesCtrl', function ($scope, $modalInstance, $rootScope, product, removeobject, ProductImages) {
     $scope.product = product;
     $scope.progress = false;
 

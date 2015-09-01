@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Kuvien muokkaus</h3>
+    <h3 class="modal-title">Image Editing</h3>
 </div>
 <div class="modal-body">
     <div class="images">
@@ -8,7 +8,7 @@
                 <show-image product="product" image="image"></show-image>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 upload"
-                ng-hide="progress" 
+                ng-hide="progress"
                 flow-init="{target: '/rest/image'}"
                 flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
                 flow-files-submitted="$flow.upload(); progress = true;"
@@ -20,5 +20,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="close()">Valmis</button>
+    <button class="btn btn-primary" ng-click="close()">Done</button>
 </div>

@@ -1,10 +1,10 @@
-angular.module( 'admin.home', [
+angular.module( 'Admin.home', [
     'ui.router'
 ])
 
 .config(function config( $stateProvider ) {
     $stateProvider.state( 'home', {
-        url: '/home',
+        url: '/',
         views: {
             "main": {
                 controller: 'HomeCtrl',
@@ -17,7 +17,7 @@ angular.module( 'admin.home', [
     });
 })
 
-.controller( 'HomeCtrl', function HomeCtrl( $scope ) {
+.controller( 'HomeCtrl', function HomeController( $scope ) {
 })
 
 ;

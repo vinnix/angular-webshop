@@ -1,4 +1,4 @@
-angular.module( 'admin.category.hidden', [
+angular.module( 'Admin.category.hidden', [
 ])
 
 .directive('categoryHidden', function() {

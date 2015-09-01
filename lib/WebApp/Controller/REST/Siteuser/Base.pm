@@ -2,6 +2,7 @@ package WebApp::Controller::REST::Siteuser::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
+use Util::Password;
 use JSON qw(encode_json decode_json from_json);
 use Scalar::Util qw(looks_like_number);
 use DateTime;
@@ -10,16 +11,6 @@ use Data::Dumper;
 BEGIN { extends 'WebApp::Controller::REST::Root' }
 
 sub siteuser_base : Chained("rest_base") PathPart("siteuser") CaptureArgs(0) {
-    my ($self, $c) = @_;
-
-    my @roles;
-    for my $role ($c->model('DB::Role')->all) {
-        push @roles, {
-            id => $role->id,
-            text => $role->name,
-        };
-    }
-    $c->stash->{roles} = \@roles;
 }
 
 sub index : Chained('siteuser_base') PathPart('') Args(0) ActionClass('REST') {
@@ -34,14 +25,16 @@ sub index_GET {
                 { '-ASC' => 'username' }
             ],
         });
-        my @data;
+        my @siteusers_data;
         for my $siteuser ($siteusers->all) {
-            push @data, {
-                id          => $siteuser->id,
-                username    => $siteuser->username
+            push @siteusers_data, {
+                id => $siteuser->id,
+                username => $siteuser->username,
+                first_name => $siteuser->first_name,
+                last_name => $siteuser->last_name,
             };
         }
-        $self->status_ok( $c, entity => { siteusers => \@data } );
+        $self->status_ok( $c, entity => { siteusers => \@siteusers_data } );
     } else {
         $self->status_forbidden($c, message => "access denied");
     }
@@ -49,29 +42,37 @@ sub index_GET {
 
 sub index_POST {
     my ($self, $c) = @_;
-    my $data ||= $c->req->data || $c->req->params;
-
+    my $params ||= $c->req->data || $c->req->params;
     if ($c->check_user_roles("admin")) {
-        if ($data) {
+        if ($params) {
             my $siteuser = $c->model('DB::Siteuser')->create({
-                'username' => $data->{username},
-                'first_name' => $data->{first_name},
-                'last_name' => $data->{last_name},
-                'email' => $data->{email},
+                username => $params->{username},
+                first_name => $params->{first_name},
+                last_name => $params->{last_name},
+                email => $params->{email},
             });
-            if ($data->{password1} and $data->{password2} and $data->{password1} eq $data->{password2} and $data->{password1} ne '') {
+
+            if ($params->{password1} and $params->{password2} and $params->{password1} eq $params->{password2} and $params->{password1} ne '') {
+                my $password = Util::Password->new;
                 $siteuser = $siteuser->update({
-                    'password' => $data->{password1},
+                    password => $password->calculate_password($c, $params->{password1}),
                 });
             }
+
+            foreach (@{$params->{roles}}) {
+                $c->model('DB::SiteuserRole')->create({
+                    siteuser => $siteuser->id,
+                    role => $_,
+                });
+            }
+
             $self->status_ok( $c, entity => {
                 id => $siteuser->id,
                 username => $siteuser->username,
                 email => $siteuser->email,
                 first_name => $siteuser->first_name,
                 last_name => $siteuser->last_name,
-                siteuser_roles => undef,
-                roles => $c->stash->{roles}
+                roles => [ $siteuser->roles->get_column('id')->all ],
             });
         } else {
             $self->status_not_found($c, message => "invalid parameters");
@@ -83,8 +84,9 @@ sub index_POST {
 
 sub stash_siteuser : Chained("siteuser_base") PathPart("") CaptureArgs(1) {
     my ($self, $c, $id) = @_;
-    if (my $siteuser = $c->model('DB::Siteuser')->find($id)) {
-        $c->stash->{siteuser_id} = $siteuser->id;
+    if (looks_like_number($id)) {
+        my $siteuser = $c->model('DB::Siteuser')->find($id);
+        $c->stash->{siteuser} = $siteuser;
     }
 }
 
@@ -94,24 +96,14 @@ sub siteuser : Chained("stash_siteuser") PathPart("") Args(0) ActionClass("REST"
 sub siteuser_GET {
     my ($self, $c) = @_;
     if ($c->check_user_roles("admin")) {
-        if ($c->stash->{siteuser_id} > 0) {
-            my $siteuser = $c->model('DB::Siteuser')->find($c->stash->{siteuser_id});
-
-            my @siteuser_roles;
-            if (my $res = $c->model('DB::SiteuserRole')->search({ siteuser => $c->stash->{siteuser_id} })) {
-                while (my $siteuser_role = $res->next) {
-                    push @siteuser_roles, $siteuser_role->role->id;
-                }
-            }
-
+        if (my $siteuser = $c->stash->{siteuser}) {
             $self->status_ok( $c, entity => {
                 id => $siteuser->id ,
                 username => $siteuser->username ,
                 email => $siteuser->email ,
                 first_name => $siteuser->first_name ,
                 last_name => $siteuser->last_name ,
-                siteuser_roles => \@siteuser_roles,
-                roles => $c->stash->{roles}
+                roles => [ $siteuser->roles->get_column('id')->all ],
             });
         } else {
             $self->status_not_found($c, message => "siteuser not found");
@@ -121,31 +113,31 @@ sub siteuser_GET {
     }
 }
 
-sub siteuser_POST {
+sub siteuser_PUT {
     my ($self, $c) = @_;
-    my $data ||= $c->req->data || $c->req->params;
-
+    my $params ||= $c->req->data || $c->req->params;
     if ($c->check_user_roles("admin")) {
-        if ($data) {
-            if (my $siteuser = $c->model('DB::Siteuser')->find($c->stash->{siteuser_id})) {
+        if ($params) {
+            if (my $siteuser = $c->stash->{siteuser}) {
                 $siteuser = $siteuser->update({
-                    'username' => $data->{username},
-                    'first_name' => $data->{first_name},
-                    'last_name' => $data->{last_name},
-                    'email' => $data->{email},
+                    username => $params->{username},
+                    first_name => $params->{first_name},
+                    last_name => $params->{last_name},
+                    email => $params->{email},
                 });
 
-                if ($data->{password1} and $data->{password2} and $data->{password1} eq $data->{password2} and $data->{password1} ne '') {
+                if ($params->{password1} and $params->{password2} and $params->{password1} eq $params->{password2} and $params->{password1} ne '') {
+                    my $password = Util::Password->new;
                     $siteuser = $siteuser->update({
-                        'password' => $data->{password1},
+                        password => $password->calculate_password($c, $params->{password1}),
                     });
                 }
 
-                $c->model('DB::SiteuserRole')->search({ siteuser => $c->stash->{siteuser_id} })->delete;
-                foreach (@{$data->{siteuser_roles}}) {
+                $c->model('DB::SiteuserRole')->search({ siteuser => $siteuser->id })->delete;
+                foreach (@{$params->{roles}}) {
                     $c->model('DB::SiteuserRole')->create({
-                        'siteuser' => $c->stash->{siteuser_id},
-                        'role' => $_,
+                        siteuser => $siteuser->id,
+                        role => $_,
                     });
                 }
 
@@ -155,8 +147,7 @@ sub siteuser_POST {
                     email => $siteuser->email ,
                     first_name => $siteuser->first_name ,
                     last_name => $siteuser->last_name ,
-                    siteuser_roles => $data->{siteuser_roles},
-                    roles => $c->stash->{roles}
+                    roles => [ $siteuser->roles->get_column('id')->all ],
                 });
             } else {
                 $self->status_not_found($c, message => "siteuser not found");
@@ -172,15 +163,15 @@ sub siteuser_POST {
 sub siteuser_DELETE {
     my ($self, $c) = @_;
     if ($c->check_user_roles("admin")) {
-        if ($c->stash->{siteuser_id} ne $c->user->id()) {
-            if (my $siteuser = $c->model('DB::Siteuser')->find($c->stash->{siteuser_id})) {
+        if (my $siteuser = $c->stash->{siteuser} ) {
+            if ($siteuser->id ne $c->user->id()) {
                 $siteuser->delete();
                 $self->status_ok( $c, entity => { result => 'ok' } );
             } else {
-                $self->status_not_found($c, message => "not found");
+                $self->status_not_found($c, message => "cannot delete oneself");
             }
         } else {
-            $self->status_not_found($c, message => "cannot delete oneself");
+            $self->status_not_found($c, message => "not found");
         }
     } else {
         $self->status_forbidden($c, message => "access denied");

@@ -17,10 +17,8 @@
                 'class' => 'Password',
                 'username_field' => 'username',
                 'password_field' => 'password',
-                'password_type' => 'clear', # hashed, clear
-                'password_hash_type' => 'SHA-512',
-                'password_pre_salt' => 'foo',
-                'password_post_salt' => 'bar',
+                'password_type' => 'salted_hash', # clear || salted_hash
+                'password_salt_len' => 16,
             },
             'store' => {
                 'class' => 'DBIx::Class',

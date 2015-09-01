@@ -1,5 +1,4 @@
-angular.module( 'admin.settings', [
-    'ngResource',
+angular.module( 'Admin.settings', [
     'ui.router'
 ])
 
@@ -19,20 +18,17 @@ angular.module( 'admin.settings', [
 })
 
 .controller('SettingsCtrl', function SettingsCtrl($scope, Setting) {
-
-    $scope.message = "Voit vaihtaa salasanasi kirjoittamalla nykyisen salasanasi ja uuden salasanan kahdesti allaoleviin kenttiin.";
     $scope.oldpassword = null;
     $scope.newpassword1 = null;
     $scope.newpassword2 = null;
 
     var changepassword = function() {
-
-        Setting.save({
+        Setting.update({
             "oldpassword": $scope.oldpassword,
             "newpassword1": $scope.newpassword1,
             "newpassword2": $scope.newpassword2
         }).$promise.then(function(x) {
-            $scope.message = "Salasanan vaihtaminen onnistui!";
+            $scope.message = "Password change successful.";
             $scope.oldpassword = null;
             $scope.newpassword1 = null;
             $scope.newpassword2 = null;
@@ -41,7 +37,7 @@ angular.module( 'admin.settings', [
             if (error.status === 403) {
                $rootScope.$emit('logout', 1);
             } else {
-                $scope.message = "Salasanan vaihtaminen epäonnistui.";
+                $scope.error = "Incorrect password, or passwords don't match.";
             }
         });
     };

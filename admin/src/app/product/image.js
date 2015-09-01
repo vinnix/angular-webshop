@@ -1,4 +1,4 @@
-angular.module( 'admin.product.image', [
+angular.module( 'Admin.product.image', [
 ])
 
 .directive('showImage', function() {
@@ -16,8 +16,6 @@ angular.module( 'admin.product.image', [
                     "image": $scope.image.id
                 }).$promise.then(function(success) {
                     $rootScope.$emit('removeimage', $scope.image.id);
-                },function(error) {
-                    // Error
                 });
             };
 

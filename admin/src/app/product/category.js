@@ -1,4 +1,4 @@
-angular.module( 'admin.product.category', [
+angular.module( 'Admin.product.category', [
 ])
 
 .directive('checkCategory', function() {

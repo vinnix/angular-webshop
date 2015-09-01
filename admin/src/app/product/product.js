@@ -1,8 +1,9 @@
-angular.module( 'admin.product', [
+angular.module( 'Admin.product', [
     'ui.router',
-    'admin.product.categories',
-    'admin.product.images',
-    'admin.product.editor',
+    'Admin.product.categories',
+    'Admin.product.images',
+    'Admin.product.editor',
+    'Admin.product.confirm',
     'ui.bootstrap.pagination'
 ])
 
@@ -29,8 +30,8 @@ angular.module( 'admin.product', [
     $scope.search = null;
 
     var productlist = function() {
-        Product.get().$promise.then(function(x) {
-            $scope.allProducts = $filter('orderBy')(x.products, $scope.predicate, $scope.reverse);
+        Product.get().$promise.then(function(success) {
+            $scope.allProducts = $filter('orderBy')(success.products, $scope.predicate, $scope.reverse);
             $scope.filteredProducts = $scope.allProducts;
             $scope.totalItems = $scope.filteredProducts.length;
             $scope.currentPage = 1;
@@ -56,8 +57,8 @@ angular.module( 'admin.product', [
         modalInstance.result.then(function(product) {
             Product.remove({
                 "id": product.id
-            }).$promise.then(function(x) {
-                if (x.message == 'OK') {
+            }).$promise.then(function(success) {
+                if (success.message == 'OK') {
                     $scope.allProducts = removeobject($scope.allProducts, product.id);
                     $scope.filteredProducts = removeobject($scope.filteredProducts, product.id);
                     $scope.totalItems = $scope.filteredProducts.length;
@@ -133,18 +134,6 @@ angular.module( 'admin.product', [
 
     productlist();
 
-})
-
-.controller('ConfirmProductCtrl', function ($scope, $modalInstance, product) {
-    $scope.product = product;
-
-    $scope.ok = function () {
-        $modalInstance.close($scope.product);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
 })
 
 ;
