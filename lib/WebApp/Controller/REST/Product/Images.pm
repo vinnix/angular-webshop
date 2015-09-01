@@ -1,4 +1,4 @@
-package WebApp::Controller::Product::Images;
+package WebApp::Controller::REST::Product::Images;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -8,7 +8,7 @@ use Data::Dumper;
 use Scalar::Util qw(looks_like_number);
 use boolean;
 
-BEGIN { extends 'WebApp::Controller::Product::Base' }
+BEGIN { extends 'WebApp::Controller::REST::Product::Base' }
 
 sub images_base : Chained("stash_product") PathPart("images") CaptureArgs(0) {
 }
@@ -118,7 +118,7 @@ sub images_GET {
                     public_id => $productimage->image->cloudinary_public_id,
                     cloud_name => $productimage->image->cloudinary_cloud_name,
                 },
-            });            
+            });
         } else {
             $self->status_not_found($c, message => "image not found");
         }
@@ -148,7 +148,7 @@ sub images_POST {
                         public_id => $productimage->image->cloudinary_public_id,
                         cloud_name => $productimage->image->cloudinary_cloud_name,
                     },
-                });            
+                });
             } else {
                 $self->status_not_found($c, message => "setting main image failed");
             }

@@ -2,26 +2,21 @@ package WebApp::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
-BEGIN { extends 'Catalyst::Controller::REST' }
+BEGIN { extends 'Catalyst::Controller' }
 
-__PACKAGE__->config(
-    namespace => '',
-    default => 'application/json',
-    map => { 'application/javascript' => 'JSONP' },
-);
+__PACKAGE__->config(namespace => '');
 
-sub base : Chained("/") PathPart("") CaptureArgs(0) {
+sub index :Path :Args(0) {
+    my ( $self, $c ) = @_;
 }
 
-sub index : Chained('base') PathPart('') Args(0) ActionClass('REST') {
+sub default :Path {
+    my ( $self, $c ) = @_;
+    $c->response->body( 'Page not found' );
+    $c->response->status(404);
 }
 
-sub index_GET {
-    my ($self, $c) = @_;
-    $self->status_ok( $c, entity => {
-        message => 'OK',
-    });
-}
+sub end : ActionClass('RenderView') {}
 
 __PACKAGE__->meta->make_immutable;
 

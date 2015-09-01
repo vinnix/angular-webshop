@@ -1,4 +1,4 @@
-package WebApp::Controller::Setting::Base;
+package WebApp::Controller::REST::Setting::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -7,10 +7,10 @@ use Scalar::Util qw(looks_like_number);
 use DateTime;
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::Root' }
+BEGIN { extends 'WebApp::Controller::REST::Root' }
 
-sub setting_base : Chained("base") PathPart("setting") CaptureArgs(0) {
-    my ($self, $c) = @_;    
+sub setting_base : Chained("rest_base") PathPart("setting") CaptureArgs(0) {
+    my ($self, $c) = @_;
 
     my @roles;
     for my $role ($c->model('DB::Role')->all) {
@@ -38,7 +38,7 @@ sub index_GET {
 }
 
 sub index_POST {
-    my ($self, $c) = @_; 
+    my ($self, $c) = @_;
     my $params ||= $c->req->data || $c->req->params;
 
     if (my $siteuser = $c->model('DB::Siteuser')->find($c->user->id)) {

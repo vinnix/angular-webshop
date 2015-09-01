@@ -1,12 +1,12 @@
-package WebApp::Controller::Session::Base;
+package WebApp::Controller::REST::Session::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::Root' }
+BEGIN { extends 'WebApp::Controller::REST::Root' }
 
-sub session_base : Chained("base") PathPart("session") CaptureArgs(0) {
+sub session_base : Chained("rest_base") PathPart("session") CaptureArgs(0) {
 }
 
 sub session : Chained("session_base") PathPart("") ActionClass("REST") {

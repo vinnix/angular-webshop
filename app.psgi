@@ -13,6 +13,8 @@ use Text::Xslate;
 use Encode qw(encode_utf8);
 use Data::Dumper;
 
+my $app = WebApp->apply_default_middlewares(WebApp->psgi_app);
+
 my $spa = sub { my ($root,$base) = @_; builder {
     if ( -d $root . "/build") {
         $root = $root . "/build";

@@ -1,4 +1,4 @@
-package WebApp::Controller::Image::Base;
+package WebApp::Controller::REST::Image::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -14,7 +14,7 @@ use Math::Round;
 use Scalar::Util qw(looks_like_number);
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::Root' }
+BEGIN { extends 'WebApp::Controller::REST::Root' }
 
 has 'cloudinary' => (is => 'ro', lazy => 1, builder => '_build_cloudinary');
 has 'ua' => (is => 'ro', lazy => 1, builder => '_build_ua');
@@ -41,7 +41,7 @@ sub _build_ua {
     return LWP::UserAgent->new();
 }
 
-sub image_base : Chained("base") PathPart("image") CaptureArgs(0) {
+sub image_base : Chained("rest_base") PathPart("image") CaptureArgs(0) {
 }
 
 sub index : Chained("image_base") PathPart("") ActionClass("REST") {

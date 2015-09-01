@@ -1,4 +1,4 @@
-package WebApp::Controller::Order::Base;
+package WebApp::Controller::REST::Order::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -9,11 +9,11 @@ use JSON;
 use URI;
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::Root' }
+BEGIN { extends 'WebApp::Controller::REST::Root' }
 
-sub order_base : Chained("base") PathPart("order") CaptureArgs(0) {
+sub order_base : Chained("rest_base") PathPart("order") CaptureArgs(0) {
     my ($self, $c) = @_;
-    $c->stash->{default_payload} = 
+    $c->stash->{default_payload} =
         encode_json({
             description => undef,
         });
@@ -178,43 +178,43 @@ sub order_POST {
             my $current_time = DateTime->now->set_time_zone('Europe/Helsinki');
             $order->update({
                 updated => DateTime::Format::Pg->format_datetime($current_time),
-            });                    
+            });
 
             if ($params->{contact}) {
                 $order->update({
                     contact => encode_json($params->{contact}),
-                });                    
+                });
             }
 
             if ($params->{products}) {
                 $order->update({
                     products => encode_json($params->{products}),
-                });                    
+                });
             }
 
             if ($params->{paid}) {
                 $order->update({
                     paid => $params->{paid},
-                });                    
+                });
                 $order = create_slug($order);
             }
 
             if ($params->{packaged}) {
                 $order->update({
                     packaged => $params->{packaged},
-                });                    
+                });
             }
 
             if ($params->{shipped}) {
                 $order->update({
                     shipped => $params->{shipped},
-                });                    
+                });
             }
 
             if ($params->{shipping_code}) {
                 $order->update({
                     shipping_code => $params->{shipping_code},
-                });                    
+                });
             }
 
             $self->status_ok( $c, entity => {

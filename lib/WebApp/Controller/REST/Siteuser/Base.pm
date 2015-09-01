@@ -1,4 +1,4 @@
-package WebApp::Controller::Siteuser::Base;
+package WebApp::Controller::REST::Siteuser::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -7,10 +7,10 @@ use Scalar::Util qw(looks_like_number);
 use DateTime;
 use Data::Dumper;
 
-BEGIN { extends 'WebApp::Controller::Root' }
+BEGIN { extends 'WebApp::Controller::REST::Root' }
 
-sub siteuser_base : Chained("base") PathPart("siteuser") CaptureArgs(0) {
-    my ($self, $c) = @_;    
+sub siteuser_base : Chained("rest_base") PathPart("siteuser") CaptureArgs(0) {
+    my ($self, $c) = @_;
 
     my @roles;
     for my $role ($c->model('DB::Role')->all) {
@@ -48,7 +48,7 @@ sub index_GET {
 }
 
 sub index_POST {
-    my ($self, $c) = @_; 
+    my ($self, $c) = @_;
     my $data ||= $c->req->data || $c->req->params;
 
     if ($c->check_user_roles("admin")) {
@@ -92,7 +92,7 @@ sub siteuser : Chained("stash_siteuser") PathPart("") Args(0) ActionClass("REST"
 }
 
 sub siteuser_GET {
-    my ($self, $c) = @_;    
+    my ($self, $c) = @_;
     if ($c->check_user_roles("admin")) {
         if ($c->stash->{siteuser_id} > 0) {
             my $siteuser = $c->model('DB::Siteuser')->find($c->stash->{siteuser_id});

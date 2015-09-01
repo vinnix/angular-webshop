@@ -1,4 +1,4 @@
-package WebApp::Controller::Product::Base;
+package WebApp::Controller::REST::Product::Base;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -12,7 +12,7 @@ use DateTime::Format::Pg;
 use Time::HiRes;
 use boolean;
 
-BEGIN { extends 'WebApp::Controller::Root' }
+BEGIN { extends 'WebApp::Controller::REST::Root' }
 
 sub create_slug {
     my ($product) = @_;
@@ -45,7 +45,7 @@ sub create_slug {
     return $created_slug;
 }
 
-sub product_base : Chained("base") PathPart("product") CaptureArgs(0) {
+sub product_base : Chained("rest_base") PathPart("product") CaptureArgs(0) {
 }
 
 sub index : Chained("product_base") PathPart("") ActionClass("REST") {
@@ -119,7 +119,7 @@ sub stash_product : Chained("product_base") PathPart("") CaptureArgs(1) {
             $c->stash->{product_id} = $product->first->id;
         } else {
             $self->status_not_found($c, message => "product not found");
-        }      
+        }
     }
 }
 
@@ -162,49 +162,49 @@ sub product_POST {
             my $current_time = DateTime->now->set_time_zone('Europe/Helsinki');
             $product->update({
                 updated => DateTime::Format::Pg->format_datetime($current_time),
-            });                    
+            });
 
             if ($params->{title}) {
                 $product->update({
                     title => $params->{title},
-                });                    
+                });
                 $product = create_slug($product);
             }
 
             if ($params->{description}) {
                 $product->update({
                     description => $params->{description},
-                });                    
+                });
             }
 
             if ($params->{hidden}) {
                 $product->update({
                     hidden => $params->{hidden},
-                });                    
+                });
             }
 
             if ($params->{price}) {
                 $product->update({
                     price => $params->{price},
-                });                    
+                });
             }
 
             if ($params->{discount}) {
                 $product->update({
                     discount => $params->{discount},
-                });                    
+                });
             }
 
             if ($params->{custom_image}) {
                 $product->update({
                     custom_image => $params->{custom_image},
-                });                    
+                });
             }
 
             if ($params->{custom_text}) {
                 $product->update({
                     custom_text => $params->{custom_text},
-                });                    
+                });
             }
 
             $self->status_ok( $c, entity => {
