@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,IAAK;EACD,gBAAgB,EAAE,KAAK",
+"sources": ["../src/sass/webshop.scss"],
+"names": [],
+"file": "webshop.css"
+}

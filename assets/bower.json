@@ -1,0 +1,10 @@
+{
+  "name": "angular-webshop",
+  "version": "0.0.1",
+  "devDependencies": {
+    "angular": "~1.3",
+    "angular-resource": "~1.3",
+    "angular-sanitize": "~1.3"
+  },
+  "dependencies": {}
+}

@@ -13,9 +13,12 @@ use Text::Xslate;
 use Encode qw(encode_utf8);
 use Data::Dumper;
 
-my $app = WebApp->apply_default_middlewares(WebApp->psgi_app);
-
 my $spa = sub { my ($root,$base) = @_; builder {
+    if ( -d $root . "/build") {
+        $root = $root . "/build";
+    } else {
+        $root = $root . "/bin";
+    }
     enable 'Head'; enable 'ConditionalGET'; enable 'HTTPExceptions';
     enable 'Static', path => sub{1}, root => $root, pass_through => 1;
     enable_if { $_[0]->{PATH_INFO} } sub { my $app = shift; sub { my $env = shift;
@@ -30,16 +33,23 @@ my $spa = sub { my ($root,$base) = @_; builder {
 builder {
     enable 'ReverseProxy';
 
-    enable "Plack::Middleware::Static",
-        path => qr{^/common/}, root => 'root/';
+    # Everything except /assets and /preview should not be cached
+    enable_if { $_[0]->{PATH_INFO} !~ m{^/assets|^/preview} }
+        'Header', set => [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ];
 
-    enable 'ErrorDocument',
-        404 => 'root/common/html/404.html',
-        500 => 'root/common/html/500.html';
+    # Extra security (BasicAuth), if needed
+    enable_if { $ENV{AUTH_USERNAME} }
+        'Auth::Basic', authenticator => sub {
+        my ($username,$password) = @_;
+        return  ( $ENV{AUTH_USERNAME} && $username eq $ENV{AUTH_USERNAME} and
+                ! $ENV{AUTH_PASSWORD} || $password eq $ENV{AUTH_PASSWORD} );
+    };
 
-    mount '/rest' => $app;
-    mount '/admin/build' => $spa->('root/admin/build','/admin/build/');
-    mount '/admin' => $spa->('admin/bin','/admin/');
-    mount '/build' => $spa->('root/app/build','/build/');
-    mount '/' => $spa->('root/app/bin','/');
+    mount '/assets' => Plack::App::File->new(root => "assets")->to_app;
+    mount '/admin' => $spa->('admin','/admin/');
+    mount '/' => $app;
 }
