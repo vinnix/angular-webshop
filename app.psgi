@@ -39,7 +39,7 @@ builder {
 
     mount '/rest' => $app;
     mount '/admin/build' => $spa->('root/admin/build','/admin/build/');
-    mount '/admin' => $spa->('root/admin/bin','/admin/');
+    mount '/admin' => $spa->('admin/bin','/admin/');
     mount '/build' => $spa->('root/app/build','/build/');
     mount '/' => $spa->('root/app/bin','/');
 }
