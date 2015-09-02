@@ -29,7 +29,7 @@ angular.module( 'Admin.product', [
     $scope.reverse = false;
     $scope.search = null;
 
-    var productlist = function() {
+    var fetchproducts = function() {
         Product.get().$promise.then(function(success) {
             $scope.allProducts = $filter('orderBy')(success.products, $scope.predicate, $scope.reverse);
             $scope.filteredProducts = $scope.allProducts;
@@ -58,12 +58,29 @@ angular.module( 'Admin.product', [
             Product.remove({
                 "id": product.id
             }).$promise.then(function(success) {
-                if (success.message == 'OK') {
-                    $scope.allProducts = removeobject($scope.allProducts, product.id);
-                    $scope.filteredProducts = removeobject($scope.filteredProducts, product.id);
-                    $scope.totalItems = $scope.filteredProducts.length;
-                    pageChanged();
+                fetchproducts();
+            });
+        });
+    };
+
+    $scope.edit = function(product, index) {
+        var modalInstance = $modal.open({
+            templateUrl: 'product/editor.tpl.html',
+            controller: 'ProductEditorCtrl',
+            size: 'lg',
+            resolve: {
+                product: function () {
+                    return product;
                 }
+            }
+        });
+        modalInstance.result.then(function(product) {
+            Product.save({
+                "id": product.id,
+                "title": product.title,
+                "description": product.description
+            }).$promise.then(function(success) {
+                fetchproducts();
             });
         });
     };
@@ -81,18 +98,9 @@ angular.module( 'Admin.product', [
         Product.save({
             "title": $scope.newtitle
         }).$promise.then(function(success) {
-            $scope.allProducts.push(success);
             $scope.newtitle = null;
             $scope.error = false;
-        }, function(error) {
-            if (error.status === 403) {
-               $rootScope.$emit('logout', 1);
-            } else if (error.status === 404) {
-                $scope.error = true;
-                alert("Error! Check missing fields.");
-            } else {
-                console.log("Error:",error.status);
-            }
+            fetchproducts();
         });
     };
 
@@ -106,7 +114,7 @@ angular.module( 'Admin.product', [
 
     $scope.$watch('search', function(newvalue, oldvalue) {
         if (newvalue) {
-            $scope.filteredProducts = $filter('filter')($scope.allProducts, newvalue);
+            $scope.filteredProducts = $filter('filter')($scope.allProducts, $scope.search);
             $scope.currentPage = 1;
             $scope.totalItems = $scope.filteredProducts.length;
         }
@@ -132,7 +140,7 @@ angular.module( 'Admin.product', [
         }
     });
 
-    productlist();
+    fetchproducts();
 
 })
 
