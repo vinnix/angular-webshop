@@ -10,6 +10,12 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 }
 
+sub product :Local :Args() {
+    my ( $self, $c, $id ) = @_;
+    print Dumper "foo";
+    $c->stash->{product} = $id;
+}
+
 sub default :Path {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );

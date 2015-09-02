@@ -1,1 +1,6 @@
-Hello World!
+: include header { title => 'Product List' }
+
+        <h1>Product List</h1>
+        <webshop-product-list></webshop-product-list>
+
+: include footer

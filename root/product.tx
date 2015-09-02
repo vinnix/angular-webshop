@@ -1,0 +1,6 @@
+: include header { title => 'Product Description' }
+
+        <h1>Product Description</h1>
+        <webshop-product-description product="<: $product :>"></webshop-product-description>
+
+: include footer
