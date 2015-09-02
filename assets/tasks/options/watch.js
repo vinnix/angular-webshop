@@ -5,10 +5,10 @@ module.exports = {
     },
     html: {
         files: ['src/html/*.html'],
-        tasks: ['htmllint:dev', 'default']
+        tasks: [/*'htmllint:dev', */'default']
     },
     sass: {
         files: ['src/sass/*.scss'],
-        tasks: ['sass:dist', 'cssmin:dist']
+        tasks: ['sass:compile', 'cssmin:dist']
     },
 };
