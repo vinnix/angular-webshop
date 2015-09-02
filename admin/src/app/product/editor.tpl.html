@@ -2,6 +2,7 @@
     <h3>Fields Editor</h3>
 </div>
 <div class="modal-body">
+    <h4>Basic Information</h4>
     <div class="form-group">
         <label class="control-label" for="title">Title:</label>
         <input class="form-control input-sm" id="title" type="text" ng-model="product.title">
@@ -10,6 +11,27 @@
     	<label class="control-label" for="description">Description:</label>
 	    <wysiwyg ng-model="product.description" textarea-class="form-control" textarea-id="description" textarea-height="250px"></wysiwyg>
 	</div>
+    <h4>Categories</h4>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" ng-repeat="category in categories">
+            <check-category product="product" category="category"></check-category>
+        </div>
+    </div>
+    <h4>Images</h4>
+    <div class="row images">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 image" ng-repeat="image in images">
+            <show-image product="product" image="image"></show-image>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 upload"
+            flow-init="{target: '/rest/image'}"
+            flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+            flow-files-submitted="$flow.upload(); progress = true;"
+            flow-file-success="imageUploadSuccess($message); progress = false;"
+            ng-hide="progress"
+            >
+            <img ng-src="{{ main.base_url + 'assets/addimage.png' }}" class="img-responsive img-rounded" flow-btn flow-attrs="{accept:'image/*'}" title="Add a new image">
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">

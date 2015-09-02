@@ -14,10 +14,6 @@
         max-size="20"
         direction-links="true"
         boundary-links="true"
-        first-text="Alkuun"
-        previous-text="Edellinen"
-        next-text="Seuraava"
-        last-text="Viimeinen"
         rotate="false">
     </pagination>
 
@@ -27,28 +23,23 @@
             <th><a ng-class="{active: predicate == 'title'}" ng-click="predicate = 'title'; reverse=false">Title</a></th>
             <th><a ng-class="{active: predicate == 'updated'}" ng-click="predicate = 'updated'; reverse=true">Updated</a></th>
             <th><a ng-class="{active: predicate == 'hidden'}" ng-click="predicate = 'hidden'; reverse=true">Hidden</a></th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
         <tr>
             <td class="col-md-1"></td>
             <td class="col-md-6"><input class="form-control" ng-model="newtitle" ng-disabled="!products"></td>
             <td class="col-md-1"></td>
             <td class="col-md-1"></td>
-            <td class="col-md-4"><button class="btn btn-default" ng-click="create()" ng-disabled="!products"><i class="fa fa-star"></i> Add product</button></td>
+            <td class="col-md-1"><button class="btn btn-default" ng-click="create()" ng-disabled="!products"><i class="fa fa-star"></i> Add product</button></td>
+            <td class="col-md-1">&nbsp;</td>
         </tr>
         <tr ng-repeat="product in products">
             <td>{{ product.id }}</td>
             <td>{{ product.title }}</td>
             <td>{{ product.updated | date:'dd.MM.yyyy' }}</td>
-            <td>
-                <input type="checkbox" ng-model="product.hidden" ng-change="hidden(product)">
-            </td>
-            <td>
-                <button class="btn btn-primary btn-default" ng-click="edit(product, $index)"><i class="fa fa-edit"></i></button>
-                <product-categories product="product"></product-categories>
-                <product-images product="product"></product-images>
-                <button class="btn btn-danger" ng-click="remove(product)"><i class="fa fa-trash"></i></button>
-            </td>
+            <td><input type="checkbox" ng-model="product.hidden" ng-change="hidden(product)"></td>
+            <td><button class="btn btn-primary btn-block" ng-click="edit(product, $index)"><i class="fa fa-edit"></i> Edit</button></td>
+            <td><button class="btn btn-danger btn-block" ng-click="remove(product, $index)"><i class="fa fa-trash"></i> Remove</button></td>
         </tr>
     </table>
 </div>

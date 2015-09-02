@@ -1,7 +1,5 @@
 angular.module( 'Admin.product', [
     'ui.router',
-    'Admin.product.categories',
-    'Admin.product.images',
     'Admin.product.editor',
     'Admin.product.confirm',
     'ui.bootstrap.pagination'
@@ -43,7 +41,7 @@ angular.module( 'Admin.product', [
         });
     };
 
-    $scope.remove = function(product) {
+    $scope.remove = function(product, index) {
         var modalInstance = $modal.open({
             templateUrl: 'product/confirm.tpl.html',
             controller: 'ConfirmProductCtrl',
