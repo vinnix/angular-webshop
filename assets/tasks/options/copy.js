@@ -28,6 +28,13 @@ module.exports = {
                 expand: true,
                 flatten: true,
                 filter: 'isFile'
+            },
+            {
+                src: 'vendor/angular-local-storage/dist/angular-local-storage.min.js',
+                dest: 'js/',
+                expand: true,
+                flatten: true,
+                filter: 'isFile'
             }
         ]
     }

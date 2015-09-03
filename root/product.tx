@@ -1,5 +1,6 @@
 : include header { title => 'Product Description' }
 
+        <p><a href="/">Back to product list</a></p>
         <h1>Product Description</h1>
         <webshop-product-description product="<: $product :>"></webshop-product-description>
 

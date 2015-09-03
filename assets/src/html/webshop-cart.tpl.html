@@ -1,0 +1,13 @@
+<h2>Cart</h2>
+
+<p ng-show="emptyCart">Cart is empty</p>
+
+<ul>
+    <li ng-repeat="item in cart | orderBy:'title':false">
+        <a ng-href="{{ productPage + '/' + item.product.id }}">{{ item.product.title }}</a>
+        {{ item.count }}
+        <button ng-click="decrementCart(item.product)">-</button>
+        <button ng-click="incrementCart(item.product)">+</button>
+        <button ng-click="removeFromCart(item.product)">Remove</button>
+    </li>
+</ul>
