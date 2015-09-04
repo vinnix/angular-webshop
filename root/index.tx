@@ -1,6 +1,6 @@
 : include header { title => 'Product List' }
 
-        <h1>Product List</h1>
+        <!-- Product Listing -->
         <webshop-product-list></webshop-product-list>
 
 : include footer

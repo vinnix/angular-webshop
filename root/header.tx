@@ -9,6 +9,7 @@
         <script type="text/javascript" src="/assets/js/angular-resource.min.js"></script>
         <script type="text/javascript" src="/assets/js/angular-local-storage.min.js"></script>
         <script type="text/javascript" src="/assets/js/webshop.js"></script>
+        <!-- Configuration -->
         <script type="text/javascript">
             angular.module('myApp', ['webshop'])
                 .constant('Config', {
@@ -19,4 +20,8 @@
     </head>
     <body>
 
+        <!-- Main Title -->
+        <h1><: $title :></h1>
+
+        <!-- Cart -->
         <webshop-cart></webshop-cart>
