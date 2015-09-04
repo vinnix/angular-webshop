@@ -170,12 +170,6 @@ sub image_GET {
         $self->status_ok( $c, entity => {
             id => $image->id,
             link => $image->link,
-            lastmodified => $image->lastmodified,
-            etag => $image->etag,
-            basename => $image->basename,
-            alt => $image->alt,
-            contenttype => $image->contenttype,
-            contentlength => $image->contentlength+0,
             width => $image->width,
             height => $image->height,
             cloudinary => $image->cloudinary_public_id ? {
