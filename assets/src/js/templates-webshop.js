@@ -1,4 +1,4 @@
-angular.module('templates-webshop', ['webshop-add-to-cart.tpl.html', 'webshop-cart.tpl.html', 'webshop-dummy.tpl.html', 'webshop-product-description.tpl.html', 'webshop-product-list.tpl.html']);
+angular.module('templates-webshop', ['webshop-add-to-cart.tpl.html', 'webshop-cart.tpl.html', 'webshop-dummy.tpl.html', 'webshop-image.tpl.html', 'webshop-product-description.tpl.html', 'webshop-product-list.tpl.html']);
 
 angular.module("webshop-add-to-cart.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("webshop-add-to-cart.tpl.html",
@@ -28,9 +28,16 @@ angular.module("webshop-dummy.tpl.html", []).run(["$templateCache", function($te
     "");
 }]);
 
+angular.module("webshop-image.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("webshop-image.tpl.html",
+    "<img ng-if=\"image\" ng-src=\"{{ image }}\" ng-class=\"imgClass\">");
+}]);
+
 angular.module("webshop-product-description.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("webshop-product-description.tpl.html",
     "<h2>{{ product.title }}</h2>\n" +
+    "\n" +
+    "<p><webshop-image id=\"{{ product.main_image }}\"></webshop-image></p>\n" +
     "\n" +
     "<p ng-bind-html=\"product.description\"></p>\n" +
     "\n" +

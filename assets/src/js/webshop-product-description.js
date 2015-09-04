@@ -2,6 +2,7 @@
     'use strict';
 
     var module = angular.module('webshop-product-description', [
+        'webshop-image',
     ]);
 
     module.directive('webshopProductDescription', ['Config', 'Product', function(Config, Product) {

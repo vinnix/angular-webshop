@@ -25,4 +25,10 @@
         });
     }]);
 
+    module.factory('Image', ['$resource', 'Config', function($resource, Config) {
+        return $resource(Config.backend + '/image/:id', {
+            id:'@id'
+        });
+    }]);
+
 }());
