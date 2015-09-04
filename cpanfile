@@ -47,4 +47,4 @@ requires 'Cloudinary';
 requires 'Mojo::IOLoop::Delay';
 requires 'Finance::Bank::Paytrail';
 requires 'URI';
-requires 'Crypt::SaltedHash';§
+requires 'Crypt::SaltedHash';
